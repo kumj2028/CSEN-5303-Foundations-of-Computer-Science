@@ -1,0 +1,103 @@
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{question}[2][Question]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\begin{document}
+
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+
+\title{Teamwork 1}%replace X with the appropriate number
+\author{Mengxiang Jiang\\ %replace with your name
+CSEN 5303 Foundations of Computer Science} %if necessary, replace with your course title
+
+\maketitle
+\begin{problem}{statement}
+In a hallway, there are three doors which allow access to three different
+rooms. These three doors are numbered 1, 2, and 3. Furthermore, there is a poster on each door
+that has a claim. One of the rooms is empty while the other two rooms contain a crazy person and
+a murderer, respectively.
+The poster on the door of the room of the crazy person says the truth and the one on the door of
+the murderer lies. However, we do not know whether the poster on the door of the empty room
+says the truth. Here are the three posters: 
+
+Poster 1: Room 3 is empty
+
+Poster 2: The murderer is in room 1
+
+Poster 3: This room is empty
+
+\end{problem}
+
+
+\begin{problem}{1} %You can use theorem, exercise, problem, or question here.  Modify x.yz to be whatever number you are proving
+In which rooms are the crazy person and the murderer located?
+
+The Crazy Person is located in Room 1, and the Murderer is located in Room 2.
+\end{problem}
+
+\begin{problem}{2}
+Explain your answer.
+\end{problem}
+
+\begin{proof}
+Assume that Poster 1 is telling the truth, then Room 3 is empty which also means that Poster 3 is telling the truth. This would imply that Room 1 has the Crazy Person, and therefore Room 2 must have the Murderer. Poster 2 would therefore be a lie implying the Murderer is not in Room 1. None of this is contradictory so we save this as a possible solution.
+
+Now Assume that Poster 1 is lying, then Room 3 is not empty which also means that Poster 3 is lying. This would imply that Room 3 must contain the Murderer, and since the Crazy Person cannot lie, he must also not be in Room 1, and the only available room is Room 2. But Room 2 says that the Murderer is in Room 1, but we already established that the Murderer must be in Room 3, so this would also be a lie, so this is not a solution.
+
+Since Poster 1 must either be telling the truth or lying, these two cases are all we need to show.
+\end{proof}
+
+\begin{problem}{statement 2}
+Now, let us assume that the three posters are as follows:
+
+Poster 1: The murderer is in room 1
+
+Poster 2: Room 3 is empty
+
+Poster 3: This room is empty
+\end{problem}
+
+\begin{problem}{3}
+Check whether there is any solution.
+If so, show your solution. Otherwise, explain why.
+
+There is no solution.
+\end{problem}
+
+\begin{proof}
+Assume Poster 1 is telling the truth, then it would contain the Murderer, but the Murderer always lies, so assumption has failed. 
+
+Assume poster 1 is lying, then the Murderer is not in Room 1, so he must be in either Room 2 or Room 3. But since the Crazy Person cannot lie, he cannot be in Room 1 and must be in either Room 2 or Room 3. Therefore Room 1 must be Empty. However, given that the Crazy Person has to tell the truth and is either in Room 2 or Room 3, one of those posters must be true, but we already know the Empty Room is Room 1, while Poster 2 claims the Empty Room is Room 3 and Poster 3 claims that the Empty Room is also Room 3. So we have a contradiction.
+
+Since Poster 1 must either be telling the truth or lying, these two cases are all we need to show, and both lead to no solution.
+\end{proof}
+
+% --------------------------------------------------------------
+%     You don't have to mess with anything below this line.
+% --------------------------------------------------------------
+
+\end{document}

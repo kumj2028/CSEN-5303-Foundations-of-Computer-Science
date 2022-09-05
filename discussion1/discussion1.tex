@@ -1,0 +1,107 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Welcome to writeLaTeX --- just edit your LaTeX on the left,
+% and we'll compile it for you on the right. If you give
+% someone the link to this page, they can edit at the same
+% time. See the help menu above for more info. Enjoy!
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+ 
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{question}[2][Question]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+ 
+\begin{document}
+ 
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+ 
+\title{Discussion 1}%replace X with the appropriate number
+\author{Mengxiang Jiang\\ %replace with your name
+CSEN 5303 Foundations of Computer Science} %if necessary, replace with your course title
+ 
+\maketitle
+ 
+\begin{problem}{statement} %You can use theorem, exercise, problem, or question here.  Modify x.yz to be whatever number you are proving
+Feel free to answer one of the following questions:
+
+1. Define the concept of algorithm. Give an illustrative example.
+
+2. Define the concept of program. What is the difference between algorithm and program?
+\end{problem}
+ 
+ \begin{problem}{1}
+ In \emph{The Art of Computer Programming} by Donald Knuth, he defines an algorithm as a ``set of rules that gives a sequence of operations for solving a specific type of problem" with ``five important features":\\
+ 
+ The first feature is \emph{finiteness}, where the algorithm must terminate in a finite number of operations. \\
+ 
+ The second feature is \emph{definiteness}, where each operation must be precisely and unambiguously defined. \\
+ 
+ The third feature is \emph{input}, where the algorithm can take in zero or more quantities of information to process. \\
+ 
+ The fourth feature is \emph{output}, where the algorithm has to produce one or more quantities of information as the result.\\
+ 
+ The fifth and final feature is \emph{effectiveness}, which is stated in the book as ``operations must all be sufficiently basic that they can in principle be done exactly and in a finite length of time by someone using pencil and paper".\\\\
+ The illustrative example given in the book is Euclid's greatest common divisor algorithm:\\\\
+ \textbf{Algorithm E} (\emph{Euclid's algorithm}). Given two positive integers $m$ and $n$, find
+their \emph{greatest common divisor}, that is, the largest positive integer that evenly
+divides both $m$ and $n$.\\
+\textbf{E1.} [Find remainder.] Divide $m$ by $n$ and let $r$ be the remainder. (We will have
+$0 \leq r < n$.)\\
+\textbf{E2.}  [Is it zero?] If $r$ = 0, the algorithm terminates; $n$ is the answer.\\
+\textbf{E3.} [Reduce.] Set $m \leftarrow n$, $n \leftarrow r$, and go back to step El.
+\\\\\\
+This algorithm meets all 5 of the features:\\\\
+1. Since $m$ and $n$ are strictly decreasing after every iteration, and since a decreasing sequence of positive integers must terminate in finite time, the algorithm is finite.\\
+2. Although the algorithm is given in English (with all it's ambiguities), the choice of words like \emph{positive}, \emph{integer}, and \emph{remainder} are fairly specific in mathematical meaning to avoid misunderstanding.\\
+3. The inputs for the algorithm are $m$ and $n$.\\
+4. The output of the algorithm is $n$, once the algorithm terminates.\\
+5. Since positive integers can be represented on paper in a finite form and can be divided using long division in finite time, a person in theory can perform all the steps of the algorithm from start to completion.
+\\\\
+Example execution of Algorithm E with input $m = 119$ and $n = 544$
+\begin{center}
+\begin{tabular}{|c c c c|} 
+ \hline
+ Iteration & $m$ & $n$ & $r$ \\
+ \hline
+ 1 & 119 & 544 & 119 \\ 
+ 2 & 544 & 119 & 68 \\
+ 3 & 119 & 68 & 51 \\
+ 4 & 68 & 51 & 17 \\
+ 5 & 51 & 17 & 0 \\
+ \hline
+\end{tabular}
+\end{center}
+ 
+ \end{problem}
+ 
+% --------------------------------------------------------------
+%     You don't have to mess with anything below this line.
+% --------------------------------------------------------------
+ 
+\end{document}
