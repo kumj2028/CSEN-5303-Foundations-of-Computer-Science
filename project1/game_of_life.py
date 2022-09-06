@@ -1,3 +1,5 @@
+# https://www.jagregory.com/abrash-black-book/#chapter-17-the-game-of-life
+
 """
 Basic Game of Life program in Python using the Pygame library to draw
 """
