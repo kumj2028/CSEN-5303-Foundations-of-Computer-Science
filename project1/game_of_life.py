@@ -32,17 +32,9 @@ HEIGHT = (CELLMAP_HEIGHT + 2) * (CELL_PIXEL_SIZE + 1)
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
 pygame.display.set_caption('Game of Life')
 
-# Import random library since we need to randomly generate a cell map at the start
-import random
-
 from cell_map import cellmap
 
-current_map = cellmap(CELLMAP_WIDTH, CELLMAP_HEIGHT)
-
-for x in range(CELLMAP_WIDTH):
-    for y in range(CELLMAP_HEIGHT):
-        if random.random() > 0.5:
-            current_map.turn_cell_on(x, y)
+current_map = cellmap(CELLMAP_WIDTH, CELLMAP_HEIGHT, rand=True)
 
 # Run until the user asks to quit
 running = True
@@ -61,12 +53,12 @@ while running:
             # Start a new timer
             pygame.time.set_timer(NEXTGEN, GEN_INTERVAL)
 
-    for x in range(CELLMAP_WIDTH):
-        for y in range(CELLMAP_HEIGHT):
-            if current_map.cell_state(x, y):
-                pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(4 * (x + 1), 4 * (y + 1), CELL_PIXEL_SIZE, CELL_PIXEL_SIZE))
-            else:
-                pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(4 * (x + 1), 4 * (y + 1), CELL_PIXEL_SIZE, CELL_PIXEL_SIZE))
+    # Only draw cells that have changed
+    for x, y in current_map.changed:
+        if current_map.cell_state(x, y):
+            pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(4 * (x + 1), 4 * (y + 1), CELL_PIXEL_SIZE, CELL_PIXEL_SIZE))
+        else:
+            pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(4 * (x + 1), 4 * (y + 1), CELL_PIXEL_SIZE, CELL_PIXEL_SIZE))
 
     # Flip the display to make everything appear
     pygame.display.flip()
