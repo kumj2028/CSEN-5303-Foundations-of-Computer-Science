@@ -1,0 +1,87 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Welcome to writeLaTeX --- just edit your LaTeX on the left,
+% and we'll compile it for you on the right. If you give
+% someone the link to this page, they can edit at the same
+% time. See the help menu above for more info. Enjoy!
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+ 
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{question}[2][Question]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+ 
+\begin{document}
+ 
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+ 
+\title{Discussion 2}%replace X with the appropriate number
+\author{Mengxiang Jiang\\ %replace with your name
+CSEN 5303 Foundations of Computer Science} %if necessary, replace with your course title
+ 
+\maketitle
+ 
+\begin{problem}{statement} %You can use theorem, exercise, problem, or question here.  Modify x.yz to be whatever number you are proving
+Feel free to answer one of the following questions:
+
+1. Discuss the selection constructs. Give an illustrative example for each one of them.
+
+2. Discuss the repetition constructs. Give an illustrative example for each one of them.
+\end{problem}
+ 
+\begin{problem}{1}
+A selection construct is a fancy way to say that an instruction is carried out only if a certain condition is met. We discussed two basic types of selection construct.\\\\
+The first is the \emph{if then else} construct. An illustrative example is:
+\begin{verbatim}
+    if weather = rain then
+        bring_umbrella := true;
+    else
+        bring_umbrella := false;
+\end{verbatim}
+This is equivalent to the statement ``If the weather is raining, then bring an umbrella, else don't bring an umbrella."\\\\
+The second is the \emph{switch case} construct. An illustrative example is:
+\begin{verbatim}
+    case (food) of
+        pancake: utensil := fork;
+        cereal: utensil := spoon;
+        smoothie: utensil : straw;
+    else
+        utensil := hand;
+    end;
+\end{verbatim}
+This is equivalent to the statement ``Use a fork to eat pancakes, a spoon to eat cereal, a straw to drink smoothies, and your hands for anything else."
+
+ 
+\end{problem}
+ 
+% --------------------------------------------------------------
+%     You don't have to mess with anything below this line.
+% --------------------------------------------------------------
+ 
+\end{document}
