@@ -1,0 +1,187 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Welcome to writeLaTeX --- just edit your LaTeX on the left,
+% and we'll compile it for you on the right. If you give
+% someone the link to this page, they can edit at the same
+% time. See the help menu above for more info. Enjoy!
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+ 
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+%New colors defined below
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+%Code listing style named "mystyle"
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{backcolour}, commentstyle=\color{codegreen},
+  keywordstyle=\color{magenta},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\footnotesize,
+  breakatwhitespace=false,         
+  breaklines=true,                 
+  captionpos=b,                    
+  keepspaces=true,                 
+  numbers=left,                    
+  numbersep=5pt,                  
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=2
+}
+
+%"mystyle" code listing set
+\lstset{style=mystyle}
+
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{question}[2][Question]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+ 
+\begin{document}
+ 
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+ 
+\title{Homework 3}%replace X with the appropriate number
+\author{Mengxiang Jiang\\ %replace with your name
+CSEN 5303 Foundations of Computer Science} %if necessary, replace with your course title
+ 
+\maketitle
+ 
+\begin{problem}{1} %You can use theorem, exercise, problem, or question here.  Modify x.yz to be whatever number you are proving
+\emph{Euclid's algorithm} (or the \emph{Euclidean algorithm}) is an algorithm that computes the \emph{greatest common divisor}, 
+denoted by \emph{gcd}, of two integers. Below are the original versions of Euclid's algorithm that uses \emph{repeated subtraction}
+and another one that uses the \emph{remainder}.
+\begin{verbatim}
+    int gcd_sub(int a, int b)               int gcd_rem(int a, int b)
+    {                                       {
+        if (!a)                                 int t;
+            return b;                           while (b)
+        while (b)                               {
+            if (a > b)                              t = b;
+                a = a - b;                          b = a % b;
+            else                                    a = t;
+                b = b - a;                      }
+        return a;                               return a;
+    }                                       }
+\end{verbatim}
+1. Trace each of the above aglorithm using specific values for $a$ and $b$.
+\begin{center}
+    \begin{tabular}{|c c c|} 
+        \hline
+        Iteration & $a$ & $b$ \\
+        \hline
+        1 & 119 & 544 \\ 
+        2 & 119 & 425 \\
+        3 & 119 & 306 \\
+        4 & 119 & 187 \\
+        5 & 119 & 68 \\
+        6 & 51 & 68 \\
+        7 & 51 & 17 \\
+        8 & 34 & 17 \\
+        9 & 17 & 17 \\
+        10 & 17 & 0 \\
+        \hline
+    \end{tabular}
+
+    Trace with $a = 119$ and $b = 544$ for $gcd\_sub$.
+
+    \begin{tabular}{|c c c|} 
+        \hline
+        Iteration & $a$ & $b$ \\
+        \hline
+        1 & 119 & 544 \\ 
+        2 & 544 & 119 \\
+        3 & 119 & 68 \\
+        4 & 68 & 51 \\
+        5 & 51 & 17 \\
+        6 & 17 & 0 \\
+        \hline
+    \end{tabular}
+    
+    Trace with $a = 119$ and $b = 544$ for $gcd\_rem$.
+\end{center}
+2. Compare both algorithms.\\
+Algorithm $gcd\_sub$ is simpler by using only subtraction with no need for a temporary variable. 
+However, it will take a lot more iterations when $a$ and $b$ greatly differ in size compared to $gcd\_rem$.
+Algorithm $gcd\_rem$ is able to reduce the larger of $a$ and $b$ to be smaller than the smaller of $a$ and $b$
+in one iteration by taking advantage of the $modulus(\%)$ operator, but this operator is more complicated than subtraction.
+
+\end{problem}
+
+\begin{problem}{2}
+    Given a fixed integer $B  (B\geq 2)$, we demonstrate that any integer $N (N\geq 0)$ 
+    can be written in a unique way in the form of the sum $p+1$ terms as follows:
+    \begin{center}
+        $N = a_0 + a_1 \times B + a^2 \times B^2 + \ldots + a_p \times B^p$
+    \end{center}
+    where all $a_i$, for $0 \leq a_i \leq B - 1$.
+    
+    The notation $a_pa_{p-1}\ldots a_0$ is called the $representation$ of $N$ in base $B$. 
+    Notice that $a_0$ is the remainder of the $Euclidean$ division of $N$ by $B$. 
+    If $Q$ is the $quotient$, $a_1$ is the remainder of the $Euclidean$ division
+    of $Q$ by $B$, etc.\\\\
+    1. Write an algorithm that generates the representation of $N$ in base $B$.
+    \begin{verbatim}
+        function BaseB(n: int, b: int) : string;
+            var
+                rem_temp : int;
+                char_temp : character;
+                result : string;
+            begin
+                result := "";
+                while n > 0 do
+                    begin
+                        rem_temp := n mod b;
+                        char_temp := CharInBaseB(rem_temp, b);
+                        result := char_temp + result;
+                        n := n / b;
+                    end;
+                return result;
+            end;
+    \end{verbatim}
+    2. Compute the time complexity of your algorithm.\\
+    $T(n) = T(n/b) + \Theta(1)$, $a = 1$, $b = b$, $f(n) = \Theta(1)$\\
+    $\log_b{a} = \log_b{1} = 0$, $n^{\log_b{a}} = n^0 = 1 = \Theta(1)$\\
+    Since $f(n)$ is the same size as $n^{\log_b{a}}$, case 2 of the master theorem applies,\\
+    so $T(n) = \Theta(\log(n))$
+
+
+\end{problem}
+ 
+% --------------------------------------------------------------
+%     You don't have to mess with anything below this line.
+% --------------------------------------------------------------
+ 
+\end{document}
