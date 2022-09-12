@@ -11,14 +11,13 @@ class cellmap:
     def __init__(self, width, height, rand=False):
         self.width = width
         self.height = height
-        self.cells = [[0]*width for i in range(height)]
+        self.cells = [[0]*height for i in range(width)]
         self.changed = []
         if rand:
             for x in range(width):
                 for y in range(height):
                     if random.random() > 0.5:
                         self.turn_cell_on(x, y)
-                    self.changed.append((x, y))
     
     # turns cell on
     def turn_cell_on(self, x, y):
