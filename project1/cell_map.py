@@ -13,6 +13,7 @@ class cellmap:
         self.height = height
         self.cells = [[0]*height for i in range(width)]
         self.changed = []
+        self.generation = 0
         if rand:
             for x in range(width):
                 for y in range(height):
@@ -60,4 +61,5 @@ class cellmap:
                     if neighbor_count == 3:
                         next_map.turn_cell_on(x, y)
                         next_map.changed.append((x, y))
+        next_map.generation = self.generation + 1
         return next_map
