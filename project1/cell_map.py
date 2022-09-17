@@ -14,6 +14,7 @@ class cellmap:
         self.cells = [[0]*height for i in range(width)]
         self.changed = []
         self.generation = 0
+        self.steady_state = False
         if rand:
             for x in range(width):
                 for y in range(height):
@@ -44,22 +45,29 @@ class cellmap:
 
     # returns the next generation cell map
     def next_generation(self):
-        next_map = cellmap(self.width, self.height)
+        if self.steady_state:
+            return self
+        else:
+            next_map = cellmap(self.width, self.height)
 
-        for x in range(self.width):
-            for y in range(self.height):
-                neighbor_count = self.count_on_neighbors(x, y)
-                # if the cell is on, turn it off if it has too many or too few on neighbors
-                if self.cell_state(x, y):
-                    if neighbor_count < 2 or neighbor_count > 3:
-                        next_map.turn_cell_off(x, y)
-                        next_map.changed.append((x, y))
+            for x in range(self.width):
+                for y in range(self.height):
+                    neighbor_count = self.count_on_neighbors(x, y)
+                    # if the cell is on, turn it off if it has too many or too few on neighbors
+                    if self.cell_state(x, y):
+                        if neighbor_count < 2 or neighbor_count > 3:
+                            next_map.turn_cell_off(x, y)
+                            next_map.changed.append((x, y))
+                        else:
+                            next_map.turn_cell_on(x, y)
+                    # if the cell is off, turn it on if it has enough on neighbors
                     else:
-                        next_map.turn_cell_on(x, y)
-                # if the cell is off, turn it on if it has enough on neighbors
-                else:
-                    if neighbor_count == 3:
-                        next_map.turn_cell_on(x, y)
-                        next_map.changed.append((x, y))
-        next_map.generation = self.generation + 1
-        return next_map
+                        if neighbor_count == 3:
+                            next_map.turn_cell_on(x, y)
+                            next_map.changed.append((x, y))
+            if len(next_map.changed) == 0:
+                self.steady_state = True
+                return self
+            else:
+                next_map.generation = self.generation + 1
+                return next_map
