@@ -16,6 +16,9 @@ Tk().wm_withdraw() #to hide the main window
 
 pygame.init()
 
+# font for pygame
+pygame_font = pygame.font.Font('WHITRABT.ttf', 30)
+
 # States of the game:
 MAIN_MENU = 0
 ABOUT = 1
@@ -25,6 +28,36 @@ PLAYING = 3
 # Window constants
 WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 600
+
+# Text constants
+WIDTH_TEXT_X = 520
+WIDTH_TEXT_Y = 50
+HEIGHT_TEXT_X = 520
+HEIGHT_TEXT_Y = 100
+GENERATION_TEXT_X = 520
+GENERATION_TEXT_Y = 150
+LIVE_TEXT_X = 520
+LIVE_TEXT_Y = 200
+DEAD_TEXT_X = 520
+DEAD_TEXT_Y = 250
+STEADY_TEXT_X = 520
+STEADY_TEXT_Y = 300
+TEXT_COLOR = (200, 200, 200)
+
+# Button constants
+BUTTON_WIDTH = 200
+BUTTON_HEIGHT = 50
+NEXT_BUTTON_X = 50
+NEXT_BUTTON_Y = 520
+AUTO_BUTTON_X = 300
+AUTO_BUTTON_Y = 520
+BACK_BUTTON_X = 550
+BACK_BUTTON_Y = 520
+BUTTON_LIGHT = (170, 170, 170)
+BUTTON_DARK = (100, 100, 100)
+BUTTON_TEXT_COLOR = (0, 255, 0)
+BUTTON_TEXT_OFFSET_X = 50
+BUTTON_TEXT_OFFSET_Y = 10
 
 # Initial state should be on the main menu
 game_state = MAIN_MENU
@@ -39,7 +72,7 @@ pygame.time.set_timer(NEXTGEN, GEN_INTERVAL)
 # cell map displaying variables
 cellmap_width = random.randint(1, 100)
 cellmap_height = random.randint(1, 100)
-cell_pixel_size = 3
+cell_pixel_size = 4
 
 # cell colors
 live_color = (0, 200, 0)
@@ -157,7 +190,6 @@ def start_the_game():
     global cellmap_height
     game_state = PLAYING
     main_menu.disable()
-    game_menu.enable()
     screen.fill((0, 0, 0))
     current_map = cellmap(cellmap_width, cellmap_height, rand=True)
 
@@ -170,9 +202,66 @@ main_menu.add.button('Quit', pygame_menu.events.EXIT)
 # state for checking whether the user wants the next generation to be generated automatically
 auto_state = False
 
+def draw_next_button(mouse):
+    if NEXT_BUTTON_X <= mouse[0] <= (NEXT_BUTTON_X + BUTTON_WIDTH) \
+    and NEXT_BUTTON_Y <= mouse[1] <= (NEXT_BUTTON_Y + BUTTON_HEIGHT):
+        pygame.draw.rect(screen, BUTTON_LIGHT, [NEXT_BUTTON_X, NEXT_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT])
+    else:
+        pygame.draw.rect(screen, BUTTON_DARK, [NEXT_BUTTON_X, NEXT_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT])
+    text = pygame_font.render('NEXT', True, BUTTON_TEXT_COLOR)
+    screen.blit(text, (NEXT_BUTTON_X + BUTTON_TEXT_OFFSET_X, NEXT_BUTTON_Y + BUTTON_TEXT_OFFSET_Y))
+
+def draw_auto_button(mouse):
+    if AUTO_BUTTON_X <= mouse[0] <= (AUTO_BUTTON_X + BUTTON_WIDTH) \
+    and AUTO_BUTTON_Y <= mouse[1] <= (AUTO_BUTTON_Y + BUTTON_HEIGHT):
+        pygame.draw.rect(screen, BUTTON_LIGHT, [AUTO_BUTTON_X, AUTO_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT])
+    else:
+        pygame.draw.rect(screen, BUTTON_DARK, [AUTO_BUTTON_X, AUTO_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT])
+    text = pygame_font.render('AUTO', True, BUTTON_TEXT_COLOR)
+    screen.blit(text, (AUTO_BUTTON_X + BUTTON_TEXT_OFFSET_X, AUTO_BUTTON_Y + BUTTON_TEXT_OFFSET_Y))
+
+def draw_back_button(mouse):
+    if BACK_BUTTON_X <= mouse[0] <= (BACK_BUTTON_X + BUTTON_WIDTH) \
+    and BACK_BUTTON_Y <= mouse[1] <= (BACK_BUTTON_Y + BUTTON_HEIGHT):
+        pygame.draw.rect(screen, BUTTON_LIGHT, [BACK_BUTTON_X, BACK_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT])
+    else:
+        pygame.draw.rect(screen, BUTTON_DARK, [BACK_BUTTON_X, BACK_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT])
+    text = pygame_font.render('BACK', True, BUTTON_TEXT_COLOR)
+    screen.blit(text, (BACK_BUTTON_X + BUTTON_TEXT_OFFSET_X, BACK_BUTTON_Y + BUTTON_TEXT_OFFSET_Y))
+
+def draw_width_text():
+    text = pygame_font.render(f'Width: {cellmap_width}', True, TEXT_COLOR)
+    screen.blit(text, (WIDTH_TEXT_X, WIDTH_TEXT_Y))
+
+def draw_height_text():
+    text = pygame_font.render(f'Height: {cellmap_height}', True, TEXT_COLOR)
+    screen.blit(text, (HEIGHT_TEXT_X, HEIGHT_TEXT_Y))
+
+def draw_generation_text():
+    text = pygame_font.render(f'Generation: {current_map.generation}', True, TEXT_COLOR)
+    screen.fill((0, 0, 0), [GENERATION_TEXT_X, GENERATION_TEXT_Y, 300, 300])
+    screen.blit(text, (GENERATION_TEXT_X, GENERATION_TEXT_Y))
+
+def draw_live_color():
+    text = pygame_font.render('Live Color: ', True, TEXT_COLOR)
+    pygame.draw.rect(screen, live_color, [LIVE_TEXT_X + 200, LIVE_TEXT_Y, 20, 20])
+    screen.blit(text, (LIVE_TEXT_X, LIVE_TEXT_Y))
+
+def draw_dead_color():
+    text = pygame_font.render('Dead Color: ', True, TEXT_COLOR)
+    pygame.draw.rect(screen, dead_color, [DEAD_TEXT_X + 200, DEAD_TEXT_Y, 20, 20])
+    screen.blit(text, (DEAD_TEXT_X, DEAD_TEXT_Y))
+
+def draw_steady_state():
+    text = pygame_font.render(f'Finished: {current_map.steady_state}', True, TEXT_COLOR)
+    screen.fill((0, 0, 0), [STEADY_TEXT_X, STEADY_TEXT_Y, 300, 100])
+    screen.blit(text, (STEADY_TEXT_X, STEADY_TEXT_Y))
+
 # Run until the user asks to quit
 running = True
 while running:
+    # gets the current mouse position
+    mouse = pygame.mouse.get_pos()
 
     # Did the user click the window close button?
     for event in pygame.event.get():
@@ -187,25 +276,52 @@ while running:
                 pygame.time.set_timer(NEXTGEN, 0)
                 # Start a new timer
                 pygame.time.set_timer(NEXTGEN, GEN_INTERVAL)
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if game_state == PLAYING:
+                if NEXT_BUTTON_X <= mouse[0] <= (NEXT_BUTTON_X + BUTTON_WIDTH) \
+                    and NEXT_BUTTON_Y <= mouse[1] <= (NEXT_BUTTON_Y + BUTTON_HEIGHT):
+                    current_map = current_map.next_generation()
+                elif AUTO_BUTTON_X <= mouse[0] <= (AUTO_BUTTON_X + BUTTON_WIDTH) \
+                    and AUTO_BUTTON_Y <= mouse[1] <= (AUTO_BUTTON_Y + BUTTON_HEIGHT):
+                    auto_state = not auto_state
+                elif BACK_BUTTON_X <= mouse[0] <= (BACK_BUTTON_X + BUTTON_WIDTH) \
+                    and BACK_BUTTON_Y <= mouse[1] <= (BACK_BUTTON_Y + BUTTON_HEIGHT):
+                    game_state = MAIN_MENU
+                    main_menu.enable()
+
     if game_state == MAIN_MENU:
         main_menu.mainloop(screen)
 
     if game_state == PLAYING:
+        draw_next_button(mouse)
+        draw_auto_button(mouse)
+        draw_back_button(mouse)
+        draw_width_text()
+        draw_height_text()
+        draw_generation_text()
+        draw_live_color()
+        draw_dead_color()
+        draw_steady_state()
+
         # Check every cell of the entire cell map if it's the first 10 iterations
         if current_map.generation == 0:
             for x in range(current_map.width):
                 for y in range(current_map.height):
                     if current_map.cell_state(x, y):
-                        pygame.draw.rect(screen, live_color, pygame.Rect(4 * (x + 1), 4 * (y + 1), cell_pixel_size, cell_pixel_size))
+                        pygame.draw.rect(screen, live_color, 
+                        [(cell_pixel_size + 1) * (x + 1), (cell_pixel_size + 1) * (y + 1), cell_pixel_size, cell_pixel_size])
                     else:
-                        pygame.draw.rect(screen, dead_color, pygame.Rect(4 * (x + 1), 4 * (y + 1), cell_pixel_size, cell_pixel_size))
+                        pygame.draw.rect(screen, dead_color, 
+                        [(cell_pixel_size + 1) * (x + 1), (cell_pixel_size + 1) * (y + 1), cell_pixel_size, cell_pixel_size])
         # Else only draw cells that have changed
         else:
             for x, y in current_map.changed:
                 if current_map.cell_state(x, y):
-                    pygame.draw.rect(screen, live_color, pygame.Rect(4 * (x + 1), 4 * (y + 1), cell_pixel_size, cell_pixel_size))
+                    pygame.draw.rect(screen, live_color, 
+                    [(cell_pixel_size + 1) * (x + 1), (cell_pixel_size + 1) * (y + 1), cell_pixel_size, cell_pixel_size])
                 else:
-                    pygame.draw.rect(screen, dead_color, pygame.Rect(4 * (x + 1), 4 * (y + 1), cell_pixel_size, cell_pixel_size))
+                    pygame.draw.rect(screen, dead_color, 
+                    [(cell_pixel_size + 1) * (x + 1), (cell_pixel_size + 1) * (y + 1), cell_pixel_size, cell_pixel_size])
 
     # Flip the display to make everything appear
     pygame.display.flip()
