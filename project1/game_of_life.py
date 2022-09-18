@@ -217,8 +217,8 @@ def draw_auto_button(mouse):
         pygame.draw.rect(screen, BUTTON_LIGHT, [AUTO_BUTTON_X, AUTO_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT])
     else:
         pygame.draw.rect(screen, BUTTON_DARK, [AUTO_BUTTON_X, AUTO_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT])
-    text = pygame_font.render('AUTO', True, BUTTON_TEXT_COLOR)
-    screen.blit(text, (AUTO_BUTTON_X + BUTTON_TEXT_OFFSET_X, AUTO_BUTTON_Y + BUTTON_TEXT_OFFSET_Y))
+    text = pygame_font.render(f'AUTO: {auto_state}', True, BUTTON_TEXT_COLOR)
+    screen.blit(text, (AUTO_BUTTON_X + 10, AUTO_BUTTON_Y + BUTTON_TEXT_OFFSET_Y))
 
 def draw_back_button(mouse):
     if BACK_BUTTON_X <= mouse[0] <= (BACK_BUTTON_X + BUTTON_WIDTH) \
