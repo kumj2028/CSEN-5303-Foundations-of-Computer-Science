@@ -74,9 +74,10 @@ cellmap_width = random.randint(1, 100)
 cellmap_height = random.randint(1, 100)
 cell_pixel_size = 4
 
-# cell colors
-live_color = (0, 200, 0)
-dead_color = (100, 0, 100)
+# cell colors (Official Blue and Gold from TAMUK graphics standards)
+# https://www.tamuk.edu/marcomm/_images_MARCOMM/branding/graphic_standards.pdf
+live_color = (255, 196, 37)
+dead_color = (0, 93, 170)
 
 # Set up the drawing window
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
