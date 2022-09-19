@@ -6,13 +6,17 @@ Basic Game of Life program in Python using the Pygame library to draw
 
 # Import libraries
 from email import message
+from tkinter import filedialog
 import pygame
 import pygame_menu
 import random
 from cell_map import cellmap
 from tkinter import *
 from tkinter import messagebox
-Tk().wm_withdraw() #to hide the main window
+import win32gui
+
+root = Tk()
+root.wm_withdraw() #to hide the main window
 
 pygame.init()
 
@@ -21,9 +25,7 @@ pygame_font = pygame.font.Font('WHITRABT.ttf', 30)
 
 # States of the game:
 MAIN_MENU = 0
-ABOUT = 1
-SETTINGS = 2
-PLAYING = 3
+PLAYING = 1
 
 # Window constants
 WINDOW_WIDTH = 800
@@ -45,18 +47,21 @@ STEADY_TEXT_Y = 300
 TEXT_COLOR = (200, 200, 200)
 
 # Button constants
-BUTTON_WIDTH = 200
+BUTTON_WIDTH_LARGE = 200
+BUTTON_WIDTH_SMALL = 100
 BUTTON_HEIGHT = 50
 NEXT_BUTTON_X = 50
 NEXT_BUTTON_Y = 520
-AUTO_BUTTON_X = 300
+AUTO_BUTTON_X = 200
 AUTO_BUTTON_Y = 520
-BACK_BUTTON_X = 550
+WRITE_BUTTON_X = 450
+WRITE_BUTTON_Y = 520
+BACK_BUTTON_X = 600
 BACK_BUTTON_Y = 520
 BUTTON_LIGHT = (170, 170, 170)
 BUTTON_DARK = (100, 100, 100)
 BUTTON_TEXT_COLOR = (0, 255, 0)
-BUTTON_TEXT_OFFSET_X = 50
+BUTTON_TEXT_OFFSET_X = 10
 BUTTON_TEXT_OFFSET_Y = 10
 
 # Initial state should be on the main menu
@@ -87,13 +92,7 @@ pygame.display.set_caption('Game of Life')
 current_map = cellmap(cellmap_width, cellmap_height, rand=True)
 
 # writing the current_map to a file for debugging purposes
-f = open('current_map.txt', 'w')
-f.writelines([str(cellmap_width), '\n', str(cellmap_height), '\n'])
-for y in range(cellmap_height):
-    for x in range(cellmap_width):
-        f.write(str(current_map.cell_state(x, y)))
-    f.write('\n')
-f.close()
+current_map.write_to_file('current_map.txt')
 
 about_menu = pygame_menu.Menu('About', WINDOW_WIDTH, WINDOW_HEIGHT,
                        theme=pygame_menu.themes.THEME_DARK)
@@ -177,6 +176,20 @@ settings_menu.add.color_input(
     color_id='dead_color'
     )
 
+def load_from_file():
+    f = filedialog.askopenfilename()
+    hwnd = pygame.display.get_wm_info()['window']
+    win32gui.SetFocus(hwnd)
+    start_the_game()
+    global current_map
+    global cellmap_width
+    global cellmap_height
+    current_map = cellmap(cellmap_width, cellmap_height, file=f)
+    cellmap_width = current_map.width
+    cellmap_height = current_map.height
+
+settings_menu.add.button('Load from file', load_from_file)
+
 settings_menu.add.button('Back', pygame_menu.events.BACK)
 
 main_menu = pygame_menu.Menu('Conway\'s Game of Life', WINDOW_WIDTH, WINDOW_HEIGHT,
@@ -185,7 +198,6 @@ main_menu = pygame_menu.Menu('Conway\'s Game of Life', WINDOW_WIDTH, WINDOW_HEIG
 def start_the_game():
     global game_state
     global main_menu
-    global game_menu
     global current_map
     global cellmap_width
     global cellmap_height
@@ -204,29 +216,38 @@ main_menu.add.button('Quit', pygame_menu.events.EXIT)
 auto_state = False
 
 def draw_next_button(mouse):
-    if NEXT_BUTTON_X <= mouse[0] <= (NEXT_BUTTON_X + BUTTON_WIDTH) \
+    if NEXT_BUTTON_X <= mouse[0] <= (NEXT_BUTTON_X + BUTTON_WIDTH_SMALL) \
     and NEXT_BUTTON_Y <= mouse[1] <= (NEXT_BUTTON_Y + BUTTON_HEIGHT):
-        pygame.draw.rect(screen, BUTTON_LIGHT, [NEXT_BUTTON_X, NEXT_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT])
+        pygame.draw.rect(screen, BUTTON_LIGHT, [NEXT_BUTTON_X, NEXT_BUTTON_Y, BUTTON_WIDTH_SMALL, BUTTON_HEIGHT])
     else:
-        pygame.draw.rect(screen, BUTTON_DARK, [NEXT_BUTTON_X, NEXT_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT])
+        pygame.draw.rect(screen, BUTTON_DARK, [NEXT_BUTTON_X, NEXT_BUTTON_Y, BUTTON_WIDTH_SMALL, BUTTON_HEIGHT])
     text = pygame_font.render('NEXT', True, BUTTON_TEXT_COLOR)
     screen.blit(text, (NEXT_BUTTON_X + BUTTON_TEXT_OFFSET_X, NEXT_BUTTON_Y + BUTTON_TEXT_OFFSET_Y))
 
 def draw_auto_button(mouse):
-    if AUTO_BUTTON_X <= mouse[0] <= (AUTO_BUTTON_X + BUTTON_WIDTH) \
+    if AUTO_BUTTON_X <= mouse[0] <= (AUTO_BUTTON_X + BUTTON_WIDTH_LARGE) \
     and AUTO_BUTTON_Y <= mouse[1] <= (AUTO_BUTTON_Y + BUTTON_HEIGHT):
-        pygame.draw.rect(screen, BUTTON_LIGHT, [AUTO_BUTTON_X, AUTO_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT])
+        pygame.draw.rect(screen, BUTTON_LIGHT, [AUTO_BUTTON_X, AUTO_BUTTON_Y, BUTTON_WIDTH_LARGE, BUTTON_HEIGHT])
     else:
-        pygame.draw.rect(screen, BUTTON_DARK, [AUTO_BUTTON_X, AUTO_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT])
+        pygame.draw.rect(screen, BUTTON_DARK, [AUTO_BUTTON_X, AUTO_BUTTON_Y, BUTTON_WIDTH_LARGE, BUTTON_HEIGHT])
     text = pygame_font.render(f'AUTO: {auto_state}', True, BUTTON_TEXT_COLOR)
-    screen.blit(text, (AUTO_BUTTON_X + 10, AUTO_BUTTON_Y + BUTTON_TEXT_OFFSET_Y))
+    screen.blit(text, (AUTO_BUTTON_X + BUTTON_TEXT_OFFSET_X, AUTO_BUTTON_Y + BUTTON_TEXT_OFFSET_Y))
+
+def draw_write_button(mouse):
+    if WRITE_BUTTON_X <= mouse[0] <= (WRITE_BUTTON_X + BUTTON_WIDTH_SMALL) \
+    and WRITE_BUTTON_Y <= mouse[1] <= (WRITE_BUTTON_Y + BUTTON_HEIGHT):
+        pygame.draw.rect(screen, BUTTON_LIGHT, [WRITE_BUTTON_X, WRITE_BUTTON_Y, BUTTON_WIDTH_SMALL, BUTTON_HEIGHT])
+    else:
+        pygame.draw.rect(screen, BUTTON_DARK, [WRITE_BUTTON_X, WRITE_BUTTON_Y, BUTTON_WIDTH_SMALL, BUTTON_HEIGHT])
+    text = pygame_font.render('WRITE', True, BUTTON_TEXT_COLOR)
+    screen.blit(text, (WRITE_BUTTON_X + BUTTON_TEXT_OFFSET_X, WRITE_BUTTON_Y + BUTTON_TEXT_OFFSET_Y))
 
 def draw_back_button(mouse):
-    if BACK_BUTTON_X <= mouse[0] <= (BACK_BUTTON_X + BUTTON_WIDTH) \
+    if BACK_BUTTON_X <= mouse[0] <= (BACK_BUTTON_X + BUTTON_WIDTH_SMALL) \
     and BACK_BUTTON_Y <= mouse[1] <= (BACK_BUTTON_Y + BUTTON_HEIGHT):
-        pygame.draw.rect(screen, BUTTON_LIGHT, [BACK_BUTTON_X, BACK_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT])
+        pygame.draw.rect(screen, BUTTON_LIGHT, [BACK_BUTTON_X, BACK_BUTTON_Y, BUTTON_WIDTH_SMALL, BUTTON_HEIGHT])
     else:
-        pygame.draw.rect(screen, BUTTON_DARK, [BACK_BUTTON_X, BACK_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT])
+        pygame.draw.rect(screen, BUTTON_DARK, [BACK_BUTTON_X, BACK_BUTTON_Y, BUTTON_WIDTH_SMALL, BUTTON_HEIGHT])
     text = pygame_font.render('BACK', True, BUTTON_TEXT_COLOR)
     screen.blit(text, (BACK_BUTTON_X + BUTTON_TEXT_OFFSET_X, BACK_BUTTON_Y + BUTTON_TEXT_OFFSET_Y))
 
@@ -279,13 +300,19 @@ while running:
                 pygame.time.set_timer(NEXTGEN, GEN_INTERVAL)
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if game_state == PLAYING:
-                if NEXT_BUTTON_X <= mouse[0] <= (NEXT_BUTTON_X + BUTTON_WIDTH) \
+                if NEXT_BUTTON_X <= mouse[0] <= (NEXT_BUTTON_X + BUTTON_WIDTH_SMALL) \
                     and NEXT_BUTTON_Y <= mouse[1] <= (NEXT_BUTTON_Y + BUTTON_HEIGHT):
                     current_map = current_map.next_generation()
-                elif AUTO_BUTTON_X <= mouse[0] <= (AUTO_BUTTON_X + BUTTON_WIDTH) \
+                elif AUTO_BUTTON_X <= mouse[0] <= (AUTO_BUTTON_X + BUTTON_WIDTH_LARGE) \
                     and AUTO_BUTTON_Y <= mouse[1] <= (AUTO_BUTTON_Y + BUTTON_HEIGHT):
                     auto_state = not auto_state
-                elif BACK_BUTTON_X <= mouse[0] <= (BACK_BUTTON_X + BUTTON_WIDTH) \
+                elif WRITE_BUTTON_X <= mouse[0] <= (WRITE_BUTTON_X + BUTTON_WIDTH_SMALL) \
+                    and WRITE_BUTTON_Y <= mouse[1] <= (WRITE_BUTTON_Y + BUTTON_HEIGHT):
+                    f = filedialog.askopenfilename()
+                    hwnd = pygame.display.get_wm_info()['window']
+                    win32gui.SetFocus(hwnd)
+                    current_map.write_to_file(f)
+                elif BACK_BUTTON_X <= mouse[0] <= (BACK_BUTTON_X + BUTTON_WIDTH_SMALL) \
                     and BACK_BUTTON_Y <= mouse[1] <= (BACK_BUTTON_Y + BUTTON_HEIGHT):
                     game_state = MAIN_MENU
                     main_menu.enable()
@@ -296,6 +323,7 @@ while running:
     if game_state == PLAYING:
         draw_next_button(mouse)
         draw_auto_button(mouse)
+        draw_write_button(mouse)
         draw_back_button(mouse)
         draw_width_text()
         draw_height_text()

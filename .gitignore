@@ -463,3 +463,4 @@ TSWLatexianTemp*
 
 # random game of life map
 project1/current_map.txt
+project1/tests/next.txt

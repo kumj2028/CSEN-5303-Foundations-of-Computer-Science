@@ -1,17 +1,17 @@
 """
 cell map class for keeping track of cells for game of life
 """
-# Import random library since we need to randomly generate a cell map at the start
+# Import random library since I need to randomly generate a cell map at the start
 import random
 
 class cellmap:
     ADJACENT = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
 
     # cellmap constructor
-    def __init__(self, width, height, rand=False):
+    def __init__(self, width, height, rand=False, file=None):
         self.width = width
         self.height = height
-        self.cells = [[0]*height for i in range(width)]
+        self.cells = [[0]*self.height for i in range(self.width)]
         self.changed = []
         self.generation = 0
         self.steady_state = False
@@ -20,7 +20,29 @@ class cellmap:
                 for y in range(height):
                     if random.random() > 0.5:
                         self.turn_cell_on(x, y)
+        if file:
+            f = open(file, 'r')
+            self.width = int(f.readline())
+            self.height = int(f.readline())
+            self.cells = [[0]*self.height for i in range(self.width)]
+            for y in range(self.height):
+                for x, c in enumerate(f.readline()):
+                    if c == '0':
+                        self.turn_cell_off(x, y)
+                    if c == '1':
+                        self.turn_cell_on(x, y)
+            f.close()
     
+    # writes cellmap to file
+    def write_to_file(self, file):
+        f = open(file, 'w')
+        f.writelines([f'{self.width}', '\n', f'{self.height}'])
+        for y in range(self.height):
+            f.write('\n')
+            for x in range(self.width):
+                f.write(str(self.cell_state(x, y)))
+        f.close()
+
     # turns cell on
     def turn_cell_on(self, x, y):
         self.cells[x][y] = 1
