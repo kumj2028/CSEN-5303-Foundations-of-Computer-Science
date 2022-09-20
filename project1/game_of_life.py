@@ -13,7 +13,22 @@ import random
 from cell_map import cellmap
 from tkinter import *
 from tkinter import messagebox
-import win32gui
+import platform
+
+# If you're on windows you need to pip install pywin32
+if platform.system() == 'Windows':
+    import win32gui
+# If you're on mac you need to do brew install wmctrl
+elif platform.system() == 'Darwin':
+    import os
+
+def refocus_window():
+    hwnd = pygame.display.get_wm_info()['window']
+    if platform.system() == 'Windows':
+        win32gui.SetFocus(hwnd)
+    elif platform.system() == 'Darwin':
+        #TODO
+        pass
 
 root = Tk()
 root.wm_withdraw() #to hide the main window
@@ -114,8 +129,10 @@ def check_cellmap_width(value):
     global cellmap_width
     if value < 0:
         messagebox.showerror('Invalid width', 'value must be positive')
+        refocus_window()
     elif value > 100:
         messagebox.showerror('Invalid width', 'value must be less than 100')
+        refocus_window()
     else:
         cellmap_width = value
 
@@ -131,8 +148,10 @@ def check_cellmap_height(value):
     global cellmap_height
     if value < 0:
         messagebox.showerror('Invalid height', 'value must be positive')
+        refocus_window()
     elif value > 100:
         messagebox.showerror('Invalid height', 'value must be less than 100')
+        refocus_window()
     else:
         cellmap_height = value
 
@@ -149,6 +168,7 @@ def check_live_color(value):
     global dead_color
     if value == dead_color:
         messagebox.showerror('Invalid live color', 'color must be different from dead color')
+        refocus_window()
     else:
         live_color = value
 
@@ -165,6 +185,7 @@ def check_dead_color(value):
     global dead_color
     if value == live_color:
         messagebox.showerror('Invalid dead color', 'color must be different from livecolor')
+        refocus_window()
     else:
         dead_color = value
 
@@ -178,8 +199,7 @@ settings_menu.add.color_input(
 
 def load_from_file():
     f = filedialog.askopenfilename()
-    hwnd = pygame.display.get_wm_info()['window']
-    win32gui.SetFocus(hwnd)
+    refocus_window()
     start_the_game()
     global current_map
     global cellmap_width
@@ -309,8 +329,7 @@ while running:
                 elif WRITE_BUTTON_X <= mouse[0] <= (WRITE_BUTTON_X + BUTTON_WIDTH_SMALL) \
                     and WRITE_BUTTON_Y <= mouse[1] <= (WRITE_BUTTON_Y + BUTTON_HEIGHT):
                     f = filedialog.askopenfilename()
-                    hwnd = pygame.display.get_wm_info()['window']
-                    win32gui.SetFocus(hwnd)
+                    refocus_window()
                     current_map.write_to_file(f)
                 elif BACK_BUTTON_X <= mouse[0] <= (BACK_BUTTON_X + BUTTON_WIDTH_SMALL) \
                     and BACK_BUTTON_Y <= mouse[1] <= (BACK_BUTTON_Y + BUTTON_HEIGHT):
