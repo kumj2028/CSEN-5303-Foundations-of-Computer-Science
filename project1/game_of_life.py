@@ -6,29 +6,13 @@ Basic Game of Life program in Python using the Pygame library to draw
 
 # Import libraries
 from email import message
-from tkinter import filedialog
 import pygame
 import pygame_menu
 import random
 from cell_map import cellmap
-from tkinter import *
-from tkinter import messagebox
+# to install tkinter on mac, do brew install python-tk
+from tkinter import filedialog, messagebox, Tk
 import platform
-
-# If you're on windows you need to pip install pywin32
-if platform.system() == 'Windows':
-    import win32gui
-# If you're on mac you need to do brew install wmctrl
-elif platform.system() == 'Darwin':
-    import os
-
-def refocus_window():
-    hwnd = pygame.display.get_wm_info()['window']
-    if platform.system() == 'Windows':
-        win32gui.SetFocus(hwnd)
-    elif platform.system() == 'Darwin':
-        #TODO
-        pass
 
 root = Tk()
 root.wm_withdraw() #to hide the main window
@@ -100,7 +84,12 @@ live_color = (255, 196, 37)
 dead_color = (0, 93, 170)
 
 # Set up the drawing window
-screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+draw_all = False
+def refocus_window():
+    global draw_all
+    draw_all = True
+    return pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+screen = refocus_window()
 pygame.display.set_caption('Game of Life')
 
 # generates a random cell map
@@ -329,8 +318,9 @@ while running:
                 elif WRITE_BUTTON_X <= mouse[0] <= (WRITE_BUTTON_X + BUTTON_WIDTH_SMALL) \
                     and WRITE_BUTTON_Y <= mouse[1] <= (WRITE_BUTTON_Y + BUTTON_HEIGHT):
                     f = filedialog.askopenfilename()
-                    refocus_window()
                     current_map.write_to_file(f)
+                    messagebox.showinfo('Wrote to file', f'Wrote current cellmap to {f}')
+                    refocus_window()
                 elif BACK_BUTTON_X <= mouse[0] <= (BACK_BUTTON_X + BUTTON_WIDTH_SMALL) \
                     and BACK_BUTTON_Y <= mouse[1] <= (BACK_BUTTON_Y + BUTTON_HEIGHT):
                     game_state = MAIN_MENU
@@ -352,7 +342,7 @@ while running:
         draw_steady_state()
 
         # Check every cell of the entire cell map if it's the first 10 iterations
-        if current_map.generation == 0:
+        if current_map.generation == 0 or draw_all:
             for x in range(current_map.width):
                 for y in range(current_map.height):
                     if current_map.cell_state(x, y):
@@ -361,6 +351,7 @@ while running:
                     else:
                         pygame.draw.rect(screen, dead_color, 
                         [(cell_pixel_size + 1) * (x + 1), (cell_pixel_size + 1) * (y + 1), cell_pixel_size, cell_pixel_size])
+            draw_all = False
         # Else only draw cells that have changed
         else:
             for x, y in current_map.changed:
