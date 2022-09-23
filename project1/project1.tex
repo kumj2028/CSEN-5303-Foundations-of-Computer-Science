@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% Welcome to writeLaTeX --- just edit your LaTeX on the left,
+% Welcome to write LaTeX --- just edit your LaTeX on the left,
 % and I'll compile it for you on the right. If you give
 % someone the link to this page, they can edit at the same
 % time. See the help menu above for more info. Enjoy!
@@ -114,10 +114,10 @@ and utilizing the Pygame library to display the cells from generation to generat
 a C++ implementation by the legendary game programmer Michael Abrash in his famous \emph{Michael Abrash's Graphics Programming Black Book}.\cite{abrash:1997}
 
 \chapter{Design}
-The main data structure I used to capture the 2D grid of squares for the cells is, fairly obviously, a 2D array.
-However, rather than simply use the raw 2D array, I decided to create a class wrapper around it called \emph{cellmap}.
+The main data structure we used to capture the 2D grid of squares for the cells is, fairly obviously, a 2D array.
+However, rather than simply use the raw 2D array, we decided to create a class wrapper around it called \emph{cellmap}.
 There are two main advantages to this. One, higher level users do not need to know the implementation details and can treat
-it as an astraction blackbox, so if a more efficient data structure or implementation is found, 
+it as a black box of extraction, so if a more efficient data structure or implementation is found, 
 the higher level users will not need to change their code.
 Two, some of the functionality should not be modified by higher level users, so using a wrapper class allows us to encapsulate the functionality I want private.
 The basic functionality of a $cellmap$ object is detailed below:
@@ -165,13 +165,13 @@ class cellmap
 
 endclass
 \end{verbatim}
-Most of the functionality is very trivial, so I'll go over the two parts that are slightly more complex,
+Most of the functionality is very trivial, so we will go over the two parts that are slightly more complex,
 namely the \emph{count\_on\_neighbors} and \emph{next\_generation}:\\
 
-For \emph{count\_on\_neighbors}, rather than use three different cases (cells at the corners, edges, and center), I generalized
+For \emph{count\_on\_neighbors}, rather than use three different cases (cells at the corners, edges, and center), we generalized
 the cases to just consider all cells as if they were in the center and therefore always having 8 neighbors. 
 There are two ways to do this, one as stated in class is the pad the 2D array on the outside with dead cells.
-The other, which is the way I did it here, is to have the getter method (\emph{cell\_state}), return the state of 
+The other, which is the way we did it here, is to have the getter method (\emph{cell\_state}), return the state of 
 out of bounds cells as dead.\\
 
 For \emph{next\_generation}, first the old $cellmap$ has its private variable $steady\_state$ checked.
@@ -182,9 +182,9 @@ Whenever a new cell state changes (from live to dead or vice versa), it is added
 ($changed$ is initialized to be empty on every newly constructed $cellmap$).
 If $changed$ is empty at the end of checking all the old cells, the old $cellmap$ changes the $steady\_state$ to true and returns
 itself. Otherwise, the new $cellmap$ has the $generation$ counter incremented by one, and is returned.\\\\
-This is all well and good, but how do I view the $cellmap$ and successive generations of it?
-Well, I need some form of drawing/displaying of the cells on a continuous loop, and this sounds very much like a game engine.
-It just so happens that Python has a fairly decent game engine library called Pygame, which I imported rather than implement our own from scratch.\cite{pygame}
+This is all well and good, but how do we view the $cellmap$ and successive generations of it?
+Well, we need some form of drawing/displaying of the cells on a continuous loop, and this sounds very much like a game engine.
+It just so happens that Python has a fairly decent game engine library called Pygame, which we imported rather than implement our own from scratch.\cite{pygame}
 
 \chapter{Code}
 \begin{lstlisting}[language=Python, caption=cell\_map.py]
@@ -812,7 +812,7 @@ Creating the menus, buttons, and colors look half decent took about five times t
 The third lesson was that I learned a lot of new ways to do things, since it was my first time using Pygame and the Python unit testing framework. 
 I also haven't written a long report in \LaTeX, so learning how to do bibliography and table of contents was pretty cool.
 \bibliographystyle{plain}
-\bibliography{refs}
+\bibliography{refs.bib}
 
 % --------------------------------------------------------------
 %     You don't have to mess with anything below this line.
