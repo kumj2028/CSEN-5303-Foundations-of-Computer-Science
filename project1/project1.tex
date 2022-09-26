@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% Welcome to write LaTeX --- just edit your LaTeX on the left,
+% Welcome to writeLaTeX --- just edit your LaTeX on the left,
 % and I'll compile it for you on the right. If you give
 % someone the link to this page, they can edit at the same
 % time. See the help menu above for more info. Enjoy!
@@ -117,7 +117,7 @@ a C++ implementation by the legendary game programmer Michael Abrash in his famo
 The main data structure we used to capture the 2D grid of squares for the cells is, fairly obviously, a 2D array.
 However, rather than simply use the raw 2D array, we decided to create a class wrapper around it called \emph{cellmap}.
 There are two main advantages to this. One, higher level users do not need to know the implementation details and can treat
-it as a black box of extraction, so if a more efficient data structure or implementation is found, 
+it as a black box, so if a more efficient data structure or implementation is found, 
 the higher level users will not need to change their code.
 Two, some of the functionality should not be modified by higher level users, so using a wrapper class allows us to encapsulate the functionality I want private.
 The basic functionality of a $cellmap$ object is detailed below:
