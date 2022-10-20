@@ -1,0 +1,159 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Welcome to writeLaTeX --- just edit your LaTeX on the left,
+% and we'll compile it for you on the right. If you give
+% someone the link to this page, they can edit at the same
+% time. See the help menu above for more info. Enjoy!
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+ 
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\usepackage{tikz}
+\usetikzlibrary{shapes,positioning}
+
+\tikzset{ell/.style={circle,draw,minimum height=0.5cm,minimum width=0.5cm,inner sep=0.2cm}}
+\tikzset{rec/.style={rectangle,draw,minimum height=0.5cm,minimum width=0.5cm,inner sep=0.2cm}}
+
+%New colors defined below
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+%Code listing style named "mystyle"
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{backcolour}, commentstyle=\color{codegreen},
+  keywordstyle=\color{magenta},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\footnotesize,
+  breakatwhitespace=false,         
+  breaklines=true,                 
+  captionpos=b,                    
+  keepspaces=true,                 
+  numbers=left,                    
+  numbersep=5pt,                  
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=2
+}
+
+%"mystyle" code listing set
+\lstset{style=mystyle}
+
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{question}[2][Question]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+ 
+\begin{document}
+ 
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+ 
+\title{Homework 9}%replace X with the appropriate number
+\author{Mengxiang Jiang\\ %replace with your name
+CSEN 5303 Foundations of Computer Science} %if necessary, replace with your course title
+ 
+\maketitle
+
+\begin{problem}{1}
+    Let $p$ and $q$ be the propositions
+\begin{quote}
+    $p$: Swimming at the New Jersey shore is allowed.\\
+    $q$: Sharks have been spotted near the shore.
+\end{quote}
+Express each of the following compound propositions, which uses $p$ and $q$ and logical connectives, as an English sentence.\\\\
+1. $\neg q$\\
+Sharks have not been spotted near the shore.\\\\
+2. $p\land q$\\
+Swimming at the New Jersey shore is allowed, and sharks have been spotted near the shore.\\\\
+3. $\neg p \lor q$\\
+Swimming at the New Jersey shore is not allowed, or else sharks have been spotted near the shore.\\\\
+4. $p\rightarrow \neg q$\\
+Swimming at the New Jersey shore is allowed, only if sharks have not been spotted near the shore.\\\\
+5. $\neg q \rightarrow p$\\
+Sharks have not been spotted near the shore, only if swimming at the New Jersey shore is allowed.\\\\
+6. $\neg p \rightarrow \neg q$\\
+Swimming at the New Jersey shore is not allowed, only if sharks have not been spotted near the shore.\\\\
+7. $p \leftrightarrow \neg q$\\
+Swimming at the New Jersey shore is allowed, if and only if sharks have not been spotted near the shore.\\\\
+8. $\neg p \land (p \lor \neg q) \equiv (\neg p \land p) \lor (\neg p \land \neg q) \equiv \neg p \land \neg q$ \\
+Swimming at the New Jersey shore is not allowed, and sharks have not been spotted near the shore.
+
+\end{problem}
+
+\begin{problem}{2}
+    Let $p$ and $q$ be the propositions 
+    \begin{quote}
+        $p$: You drive over 65 miles per hour.\\
+        $q$: You get a speeding ticket.
+    \end{quote}
+    Write each of the following propositions using p and q and logical connectives.\\\\
+    1. You do not drive over 65 miles per hour.\\
+    $\neg p$\\\\
+    2. You drive over 65 miles per hour, but you do not get a speeding ticket.\\
+    $p \land \neg q$\\\\
+    3. You will get a speeding ticket if you drive over 65 miles per hour.\\
+    $p \rightarrow q$\\\\
+    4. If you do not drive over 65 miles per hour, then you will not get a speeding ticket.\\
+    $\neg p \rightarrow \neg q$\\\\
+    5. Driving over 65 miles per hour is sufficient for getting a speeding ticket.\\
+    $p \rightarrow q$\\\\
+    6. You get a speeding ticket, but you do not drive over 65 miles per hour.\\
+    $q \land \neg p$\\\\
+    7. Whenever you get a speeding ticket, you are driving over 65 miles per hour.\\
+    $q \rightarrow p$
+\end{problem}
+\pagebreak
+\begin{problem}{3}
+    Write each of the following propositions in the form “if p, then q” in English.
+    [Hint: Refer to the list of common ways to express conditional statements.]\\\\
+1. I will remember to send you the address only if you send me an e-mail message.\\
+If I remembered to send you the address, then you sent me an email message.\\\\
+2. To be a citizen of this country, it is sufficient that you were born in the United States.\\
+If you were born in the United States, then you are a citizen of this country.\\\\
+3. If you keep your textbook, it will be a useful reference in your futures courses.\\
+If you keep your textbook, then it will be a useful reference in your future courses.\\\\
+4. The Red Wings will win the Stanley Cup if their goalie plays well.\\
+If their goalie plays well, then the Red Wings will win the Stanley Cup.\\\\
+5. That you got the job implies that you had the best credentials.\\
+If you got the job, then you had the best credentials.\\\\
+6. It is necessary to have a valid password to log onto the server.\\
+If you logged onto the server, then you had a valid password.\\\\
+7. You will reach the summit unless you begin your climb too late.\\
+If you do not begin your climb too late, then you will reach the summit.
+\end{problem}
+% --------------------------------------------------------------
+%     You don't have to mess with anything below this line.
+% --------------------------------------------------------------
+ 
+\end{document}
