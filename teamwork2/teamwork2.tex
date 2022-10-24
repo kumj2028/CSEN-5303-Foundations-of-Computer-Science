@@ -1,0 +1,72 @@
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{question}[2][Question]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\begin{document}
+
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+
+\title{Teamwork 2}%replace X with the appropriate number
+\author{Mengxiang Jiang\\ %replace with your name
+CSEN 5303 Foundations of Computer Science} %if necessary, replace with your course title
+
+\maketitle
+\begin{problem}{2}
+    For any even integer $n$, it is always possible to find a pair of integers $m$ and $k$ such that
+$n = m \times 2^k$, where $m$ is the smallest integer.
+
+\begin{quote}
+    1. Write an algorithm that finds a factorization of any even integer n as stated above. For
+    instance, we have the following two factorizations: $48 = 3 \times 2^4$ instead of 
+    $48 = 12 \times 2^2$ and $52 = 13 \times 2^2$ instead of $52 = 26 \times 2$.
+\end{quote}
+\begin{verbatim}
+procedure SmallestOdd(n: integer; var m, k: integer);
+    begin
+        m := n;
+        k := 0;
+        while((m mod 2) = 0) do
+            begin
+                k := k + 1;
+                m := m / 2;
+            end;
+    end;
+\end{verbatim}
+
+\begin{quote}
+    2. Analyze the time of your algorithm.
+
+    The time complexity of the algorithm is $O(\log_2n)$ since each iteration halves the input.
+\end{quote}
+
+
+\end{problem}
+% --------------------------------------------------------------
+%     You don't have to mess with anything below this line.
+% --------------------------------------------------------------
+
+\end{document}
