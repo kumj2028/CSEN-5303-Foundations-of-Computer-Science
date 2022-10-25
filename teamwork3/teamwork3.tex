@@ -115,7 +115,15 @@ CSEN 5303 Foundations of Computer Science} %if necessary, replace with your cour
     \node[ell] (j2)at (12.75,-4) {\tiny$b,c,d,a$};
     \node[ell] (k2)at (14.25,-4) {\tiny$b<d$};
     \node[ell] (l2)at (15.75,-4) {\tiny$c,b,d,a$};
-
+    \node[ell] (m2)at (17.25,-4) {\tiny$c<d$};
+    \node[ell] (n2)at (3,-6) {\tiny$a,d,c,b$};
+    \node[ell] (o2)at (5,-6) {\tiny$d,a,c,b$};
+    \node[ell] (p2)at (7,-6) {\tiny$c,d,a,b$};
+    \node[ell] (q2)at (9,-6) {\tiny$d,c,a,b$};
+    \node[ell] (r2)at (11,-6) {\tiny$b,d,c,a$};
+    \node[ell] (s2)at (13,-6) {\tiny$d,b,c,a$};
+    \node[ell] (t2)at (15,-6) {\tiny$c,d,b,a$};
+    \node[ell] (u2)at (17,-6) {\tiny$d,c,b,a$};
   
     \draw [] (a) to []node[left]{\tiny$a < b$} (b);
     \draw [] (a) to []node[right]{\tiny$b < a$} (c);
@@ -148,17 +156,30 @@ CSEN 5303 Foundations of Computer Science} %if necessary, replace with your cour
     \draw [] (s) to []node[above]{\tiny$a<c<d<b$} (d2);
     \draw [] (s) to []node[below]{\tiny$(a<c<b)\land(d<c)$} (e2);
     \draw [] (u) to []node[above]{\tiny$c<a<d<b$} (f2);
-    \draw [] (u) to []node[below]{\tiny$(c<a<d)\land(d<a)$} (g2);
+    \draw [] (u) to []node[below]{\tiny$(c<a<b)\land(d<a)$} (g2);
     \draw [] (w) to []node[above]{\tiny$b<d<a<c$} (h2);
     \draw [] (w) to []node[below]{\tiny$d<b<a<c$} (i2);
     \draw [] (y) to []node[above]{\tiny$b<c<d<a$} (j2);
     \draw [] (y) to []node[below]{\tiny$(b<c<a)\land(d<c)$} (k2);
+    \draw [] (a2) to []node[above]{\tiny$c<b<d<a$} (l2);
+    \draw [] (a2) to []node[below]{\tiny$(c<b<a)\land(d<b)$} (m2);
+    \draw [] (e2) to []node[above]{\tiny$a<d<c<b$} (n2);
+    \draw [] (e2) to []node[below]{\tiny$d<a<c<b$} (o2);
+    \draw [] (g2) to []node[above]{\tiny$c<d<a<b$} (p2);
+    \draw [] (g2) to []node[below]{\tiny$d<c<a<b$} (q2);
+    \draw [] (k2) to []node[above]{\tiny$b<d<c<a$} (r2);
+    \draw [] (k2) to []node[below]{\tiny$d<b<c<a$} (s2);
+    \draw [] (m2) to []node[above]{\tiny$c<d<b<a$} (t2);
+    \draw [] (m2) to []node[below]{\tiny$d<c<b<a$} (u2);
 
   \end{tikzpicture}
 
 \begin{quote}
     2. How many comparisons does your algorithm do in the worst case? On the average?
 \end{quote}
+The worst case number of comparisons is 6.\\
+On average the number of comparisons is\\
+$\frac{2*3 + 6*4 + 8*5 + 8*6}{24} = \frac{118}{24} = \frac{59}{12} \approx 4.9$.
 
 \end{problem}
 % --------------------------------------------------------------
