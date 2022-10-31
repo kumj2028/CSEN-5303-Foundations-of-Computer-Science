@@ -1,0 +1,186 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Welcome to writeLaTeX --- just edit your LaTeX on the left,
+% and we'll compile it for you on the right. If you give
+% someone the link to this page, they can edit at the same
+% time. See the help menu above for more info. Enjoy!
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+ 
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\usepackage{tikz}
+\usetikzlibrary{shapes,positioning}
+
+\tikzset{ell/.style={circle,draw,minimum height=0.5cm,minimum width=0.5cm,inner sep=0.2cm}}
+\tikzset{rec/.style={rectangle,draw,minimum height=0.5cm,minimum width=0.5cm,inner sep=0.2cm}}
+
+%New colors defined below
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+%Code listing style named "mystyle"
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{backcolour}, commentstyle=\color{codegreen},
+  keywordstyle=\color{magenta},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\footnotesize,
+  breakatwhitespace=false,         
+  breaklines=true,                 
+  captionpos=b,                    
+  keepspaces=true,                 
+  numbers=left,                    
+  numbersep=5pt,                  
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=2
+}
+
+%"mystyle" code listing set
+\lstset{style=mystyle}
+
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{question}[2][Question]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+ 
+\begin{document}
+ 
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+ 
+\title{Homework 11}%replace X with the appropriate number
+\author{Mengxiang Jiang\\ %replace with your name
+CSEN 5303 Foundations of Computer Science} %if necessary, replace with your course title
+ 
+\maketitle
+
+\begin{problem}{1}
+    Use one of the proof methods to prove the following results. 
+\begin{quote}
+    1. Prove that $n^2 + 1 \geq 2n$, where $n$ is a positive integer with $1 \leq n \leq 4$.
+\end{quote}
+Exhaustive proof: since $n$ is an integer between 1 and 4, inclusive, there are only 4 different cases to consider.\\
+$n=1 \rightarrow n^2 + 1 = 1^2 + 1 = 2 \geq 2(1) = 2$\\
+$n=2 \rightarrow n^2 + 1 = 2^2 + 1 = 5 \geq 2(2) = 4$\\
+$n=3 \rightarrow n^2 + 1 = 3^2 + 1 = 10 \geq 2(3) = 6$\\
+$n=4 \rightarrow n^2 + 1 = 4^2 + 1 = 17 \geq 2(4) = 8 \qed$
+\begin{quote}
+    2. Prove that if $x$ and $y$ are real numbers, then $max(x, y) + min(x, y) = x + y$.
+\end{quote}
+Proof by cases: since it is either the case that $x \geq y$ or $x < y$, we have two cases to consider.\\
+$x \geq y \rightarrow max(x, y) = x$ and $min(x, y) = y \rightarrow max(x,y)+min(x,y) = x + y$\\
+$x < y \rightarrow max(x,y) = y$ and $min(x, y) = x \rightarrow max(x,y) + min(x,y) = y + x = x + y\qed$\\
+\end{problem}
+
+\begin{problem}{2}
+Consider the set of integers. 
+\begin{quote}
+    1. Use a direct proof to show that the sum of two even integers is even
+\end{quote}
+Let $a$ and $b$ be two even integers.\\
+Since $a$ is even, $a = 2m$ for some integer $m$.\\
+Likewise $b = 2n$ for some integer $n$.\\
+$a + b = 2m + 2n = 2(m+n) \qed$
+\begin{quote}
+    2. Prove that if $m + n$ and $n + p$ are even integers, where $m$, $n$, and $p$ are integers, then $m + p$
+is even. What kind if proof did you use?
+\end{quote}
+Direct proof:
+Since $m + n$ and $n + p$ are even integers, their sum must be even from the previous proof:\\
+$(m + n) + (n + p) = m + 2n + p = 2k$ for some integer $k$\\
+Subtract $2n$ from both sides we get $m + p = 2k - 2n = 2(k-n)\qed$
+\pagebreak
+\begin{quote}
+    3. Use a direct proof to show that every odd integer is the difference of two squares
+\end{quote}
+Every odd integer can be represented as $2k + 1$ for some integer $k$.\\
+$(k + 1)^2 - k^2 = k^2 + 2k + 1 - k^2 = 2k + 1 \qed$
+
+\begin{quote}
+    4. Prove that if $n$ is an integer and $3n + 2$ is even, then $n$ is even using\\
+    a) A proof by contraposition.
+\end{quote}
+$P$: $3n + 2$ is even.\\
+$Q$: $n$ is even.\\
+$\neg Q:$ $n$ is odd, so $n = 2k + 1$ for some integer $k$.\\
+$3n + 2 = 3(2k + 1) + 2 = 6k + 3 + 2 = 6k + 4 + 1 = 2(3k + 2) + 1 \equiv \neg P$ \\
+$\neg Q \rightarrow \neg P \qed$
+\begin{quote}
+    b) A proof by contradiction.
+\end{quote}
+$P$: $3n + 2$ is even.\\
+$Q$: $n$ is even.\\
+$P \land \neg Q:$ $3n + 2$ is even and $n$ is odd.\\
+Since $n$ is odd, $n = 2k+1$ for some integer $k$\\
+$3n + 2 = 3(2k + 1) + 2 = 6k + 3 + 2 = 6k + 4 + 1 = 2(3k + 2) + 1 \equiv \neg P$.\\
+$P \land \neg P$ contradiction $\qed$.
+
+\begin{quote}
+    5. Prove that if $n$ is an integer, the following four statements are equivalent:\\
+a) $n$ is even.\\
+b) $n + 1$ is odd.\\
+c) $3n + 1$ is odd.\\
+d) $3n$ is even.
+\end{quote}
+So we need to show $a \leftrightarrow b \leftrightarrow c \leftrightarrow d$.\\
+$a \rightarrow b$: Direct: If $n$ is even, $n = 2k$ for some integer $k$, so $n+1 = 2k+1$.\\
+$b \rightarrow a$: Direct: If $n+1$ is odd, $n+1 = 2k + 1$ for some integer $k$, so $n = 2k$.\\
+$a \rightarrow c$: Direct: If $n$ is even, $n = 2k$ for some integer $k$, so $3n + 1 = 3(2k) + 1 = 2(3k) + 1$.\\
+$c \rightarrow a$: Contraposition: If $n$ is odd, $n = 2k + 1$ for some integer $k$, so $3n+1 = 3(2k+1) + 1 = 6k+3+1 = 6k+4 = 2(3k + 2)$.\\
+$a \rightarrow d$: Direct: If $n$ is even, $n = 2k$ for some integer $k$, so $3n = 3(2k) = 2(3k)$.\\
+$d \rightarrow a$: Contraposition: If $n$ is odd, $n = 2k + 1$ for some integer $k$, so $3n = 3(2k+1) = 6k + 3 = 6k + 2 + 1 = 2(3k + 1) + 1$.\\
+The rest of missing implications can be found using the hypothetical syllogism inference rule (i.e. $(b \rightarrow a) \land (a \rightarrow c) \equiv b \rightarrow c$).
+\pagebreak
+\begin{quote}
+    6. Find a counterexample to the statement “Every positive integer can be written as the sum
+of the squares of three integers”.
+\end{quote}
+7 cannot be written as a sum of three squares since:\\
+$0 + 0 + 0 = 0$\\
+$0 + 0 + 1 = 1$\\
+$0 + 1 + 1 = 2$\\
+$1 + 1 + 1 = 3$\\
+$0 + 0 + 4 = 4$\\
+$0 + 1 + 4 = 5$\\
+$1 + 1 + 4 = 6$\\
+$0 + 4 + 4 = 8$\\
+$1 + 4 + 4 = 9$\\
+$4 + 4 + 4 = 12$\\
+Since 0, 1, and 4 are the only squares less than 7, and all their combinations fail
+\end{problem}
+% --------------------------------------------------------------
+%     You don't have to mess with anything below this line.
+% --------------------------------------------------------------
+ 
+\end{document}
