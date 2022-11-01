@@ -11,27 +11,21 @@ class SortTAM:
     
     # sorts the tamuk array
     def sort_tam(self):
-        a = m = -1
-        for i in range(len(self.tamuk)):
-            if self.tamuk[i] == 'T':
-                if a > -1:
-                    self.swap(a, i)
-                    a += 1
-                elif m > -1:
-                    self.swap(m, i)
-                    m += 1
-            if self.tamuk[i] == 'A':
-                if m > -1:
-                    self.swap(m, i)
-                    if a == -1:
-                        a = m
-                    m += 1
-                elif a == -1:
-                    a = i
+        last_t = -1
+        first_m = len(self.tamuk)
+        i = 0
+        while(i < first_m):
             if self.tamuk[i] == 'M':
-                if m == -1:
-                    m = i
-    
+                while(self.tamuk[first_m - 1] == 'M'):
+                    first_m -= 1
+                if i < first_m - 1:
+                    self.swap(i, first_m - 1)
+                    first_m -= 1
+            if self.tamuk[i] == 'T':
+                if i > last_t + 1:
+                    self.swap(i, last_t + 1)
+                last_t += 1
+            i += 1
     # swaps elements in the i-th and j-th position of the array tamuk
     def swap(self, i, j):
         self.tamuk[i], self.tamuk[j] = self.tamuk[j], self.tamuk[i]
@@ -41,7 +35,7 @@ def main():
     raw_input = input("Please enter a string of T's, A's, and M's in any order (i.e. MMAATT):")
     st = SortTAM(raw_input)
     st.sort_tam()
-    print(f'The sorted array is {st.tamuk}')
+    print(f'The sorted string is {"".join(st.tamuk)}')
 
 if __name__ == '__main__':
     main()

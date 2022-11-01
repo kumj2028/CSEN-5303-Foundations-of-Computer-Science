@@ -107,15 +107,7 @@ Special constraints are in place to make this sort harder:
 \textbf{only} the array TAMUK can be used to sort the `A', `M', or `T'.\\
 \textbf{-Constraint 4:} You \textbf{cannot count} the number of each letter `A', `M', or `T'.
 \end{quote}
-There is some ambiguity with contraints 2 and 3. 
-One interpretation of constraint 2 is that only the minimum number of swaps needed to sort the array is allowed.
-However, I will show in \autoref{chapter:design} that if this interpretation is followed, 
-then constraint 3 will be violated, 
-namely significantly more space is required to figure out the minimum amount of swaps.
-Therefore, my interpretation of constraint 2 is 
-that swaps will only be used if the two letters being swapped are not the same.
-My interpretation of constraint 3 is that primitive data structures such as integers are allowed (such as indexing variables),
- just not something like bigger like arrays. The main algorithm used is a type of insertion sort, and the programming language used to implement is is Python.
+The main algorithm used is a type of insertion sort, and the programming language used to implement it is Python.
 \chapter{Design}
 \label{chapter:design}
 First I will show the algorithm in pseudocode and then give a short example of how it works.
@@ -123,135 +115,186 @@ Here is the pseudocode:
 \begin{verbatim}
 procedure Sort_TAM(TAMUK: arrayChar);
     var
-        a, m, i: integer;
+        last_t, first_m, i: integer;
     begin
-        a := -1;
-        m := -1;
-        for i:=0 to n-1 do
-            if TAMUK[i] = 'T' then
-                if a > -1 then
-                    SWAP(TAMUK, a, i);
-                    a := a + 1;
-                else if m > -1 then
-                    SWAP(TAMUK, m, i);
-                    m := m + 1;
-            if TAMUK[i] = 'A' then
-                if m > -1 then
-                    SWAP(TAMUK, m, i);
-                    if a = -1 then
-                        a := m;
-                    m := m + 1;
-                else if a = -1 then
-                    a := i;
+        last_t := -1;
+        first_m := n;
+        i := 0;
+        while (i < first_m) do
             if TAMUK[i] = 'M' then
-                if m = -1 then
-                    m := i;
+                while (TAMUK[first_m - 1] = 'M') do
+                    first_m := first_m - 1;
+                if i < first_m - 1 then
+                    SWAP(TAMUK, i, first_m - 1);
+                    first_m := first_m - 1;
+            if TAMUK[i] = 'T' then
+                if i > last_t + 1 then
+                    SWAP(TAMUK, i, last_t + 1);
+                last_t := last_t + 1;
+            i := i + 1;
     end;
 \end{verbatim}
 \pagebreak
 Suppose the given character array, $TAMUK$, is given as below:\\\\
 \begin{tikzpicture}[>=stealth]
     \node[rec] (m1) at (0,0) {M};
-    \node[rec] (m2) at (2,0) {M};
-    \node[rec] (a1) at (4,0) {A};
-    \node[rec] (a2) at (6,0) {A};
-    \node[rec] (t1) at (8,0) {T};
+    \node[rec] (a1) at (2,0) {A};
+    \node[rec] (t1) at (4,0) {T};
+    \node[rec] (m2) at (6,0) {M};
+    \node[rec] (a2) at (8,0) {A};
     \node[rec] (t2) at (10,0) {T};
 \end{tikzpicture}
-\\We initialize our variables: $a=-1$ and $m=-1$.\\\\
+\\We initialize our variables: $last\_t=-1$ and $first\_m=6$\\\\
 \begin{tikzpicture}[>=stealth]
     \node[red,rec] (m1) at (0,0) {M};
-    \node[rec] (m2) at (2,0) {M};
-    \node[rec] (a1) at (4,0) {A};
-    \node[rec] (a2) at (6,0) {A};
-    \node[rec] (t1) at (8,0) {T};
-    \node[rec] (t2) at (10,0) {T};
-\end{tikzpicture}
-\\We evaluate $TAMUK[0]$: $a=-1$ and $m=0$.\\\\
-\begin{tikzpicture}[>=stealth]
-    \node[rec] (m1) at (0,0) {M};
-    \node[red,rec] (m2) at (2,0) {M};
-    \node[rec] (a1) at (4,0) {A};
-    \node[rec] (a2) at (6,0) {A};
-    \node[rec] (t1) at (8,0) {T};
-    \node[rec] (t2) at (10,0) {T};
-\end{tikzpicture}
-\\We evaluate $TAMUK[1]$: $a=-1$ and $m=0$.\\\\
-\begin{tikzpicture}[>=stealth]
-    \node[rec] (m1) at (0,0) {M};
-    \node[rec] (m2) at (2,0) {M};
-    \node[red,rec] (a1) at (4,0) {A};
-    \node[rec] (a2) at (6,0) {A};
-    \node[rec] (t1) at (8,0) {T};
-    \node[rec] (t2) at (10,0) {T};
-    \draw [<->] (a1) to [bend right]node[above]{$1$} (m1);
-\end{tikzpicture}
-\\We evaluate $TAMUK[2]$: $a=0$ and $m=1$.\\\\
-\begin{tikzpicture}[>=stealth]
-    \node[rec] (a1) at (0,0) {A};
-    \node[rec] (m2) at (2,0) {M};
-    \node[rec] (m1) at (4,0) {M};
-    \node[red,rec] (a2) at (6,0) {A};
-    \node[rec] (t1) at (8,0) {T};
-    \node[rec] (t2) at (10,0) {T};
-    \draw [<->] (a2) to [bend right]node[above]{$2$} (m2);
-\end{tikzpicture}
-\\We evaluate $TAMUK[3]$: $a=0$ and $m=2$.\\\\
-\begin{tikzpicture}[>=stealth]
-    \node[rec] (a1) at (0,0) {A};
-    \node[rec] (a2) at (2,0) {A};
-    \node[rec] (m1) at (4,0) {M};
+    \node[rec] (a1) at (2,0) {A};
+    \node[rec] (t1) at (4,0) {T};
     \node[rec] (m2) at (6,0) {M};
-    \node[red,rec] (t1) at (8,0) {T};
+    \node[rec] (a2) at (8,0) {A};
     \node[rec] (t2) at (10,0) {T};
-    \draw [<->] (t1) to [bend right=35]node[above]{$3$} (a1);
-    \draw [<->] (t1) to [bend right]node[above left]{$4$} (m1);
+    \draw [<->] (m1) to [bend left=20]node[above]{$1$} (t2);
 \end{tikzpicture}
-\\We evaluate $TAMUK[4]$: $a=1$ and $m=3$.\\\\
+\\We evaluate $TAMUK[0]$: $last\_t=0$ and $first\_m=5$\\\\
 \begin{tikzpicture}[>=stealth]
-    \node[rec] (t1) at (0,0) {T};
-    \node[rec] (a2) at (2,0) {A};
-    \node[rec] (a1) at (4,0) {A};
+    \node[rec] (t2) at (0,0) {T};
+    \node[red,rec] (a1) at (2,0) {A};
+    \node[rec] (t1) at (4,0) {T};
     \node[rec] (m2) at (6,0) {M};
-    \node[rec] (m1) at (8,0) {M};
-    \node[red,rec] (t2) at (10,0) {T};
-    \draw [<->] (t2) to [bend right=35]node[above]{$5$} (a2);
-    \draw [<->] (t2) to [bend right]node[above left]{$6$} (m2);
+    \node[rec] (a2) at (8,0) {A};
+    \node[rec] (m1) at (10,0) {M};
 \end{tikzpicture}
-\\We evaluate $TAMUK[5]$: $a=2$ and $m=4$.\\\\
+\\We evaluate $TAMUK[1]$: $last\_t=0$ and $first\_m=5$\\\\
 \begin{tikzpicture}[>=stealth]
-    \node[rec] (t1) at (0,0) {T};
-    \node[rec] (t2) at (2,0) {T};
+    \node[rec] (t2) at (0,0) {T};
+    \node[rec] (a1) at (2,0) {A};
+    \node[red,rec] (t1) at (4,0) {T};
+    \node[rec] (m2) at (6,0) {M};
+    \node[rec] (a2) at (8,0) {A};
+    \node[rec] (m1) at (10,0) {M};
+    \draw [<->] (t1) to [bend right]node[above]{$2$} (a1);
+\end{tikzpicture}
+\\We evaluate $TAMUK[2]$: $last\_t=1$ and $first\_m=5$\\\\
+\begin{tikzpicture}[>=stealth]
+    \node[rec] (t2) at (0,0) {T};
+    \node[rec] (t1) at (2,0) {T};
+    \node[rec] (a1) at (4,0) {A};
+    \node[red,rec] (m2) at (6,0) {M};
+    \node[rec] (a2) at (8,0) {A};
+    \node[rec] (m1) at (10,0) {M};
+    \draw [<->] (m2) to [bend left]node[above]{$3$} (a2);
+\end{tikzpicture}
+\\We evaluate $TAMUK[3]$: $last\_t=1$ and $first\_m=4$\\\\
+\begin{tikzpicture}[>=stealth]
+    \node[rec] (t2) at (0,0) {T};
+    \node[rec] (t1) at (2,0) {T};
     \node[rec] (a1) at (4,0) {A};
     \node[rec] (a2) at (6,0) {A};
-    \node[rec] (m1) at (8,0) {M};
-    \node[rec] (m2) at (10,0) {M};
+    \node[rec] (m2) at (8,0) {M};
+    \node[rec] (m1) at (10,0) {M};
 \end{tikzpicture}
-\\The final sorted array. 
-Notice that there were 6 swap operations (indicated by the number on the directed edges).
-This is not the optimal/minimum number of swaps to sort the array.
-Instead, the optimal is shown below:\\
-\begin{tikzpicture}[>=stealth]
-    \node[rec] (m1) at (0,0) {M};
-    \node[rec] (m2) at (2,0) {M};
-    \node[rec] (a1) at (4,0) {A};
-    \node[rec] (a2) at (6,0) {A};
-    \node[rec] (t1) at (8,0) {T};
-    \node[rec] (t2) at (10,0) {T};
-    \draw [<->] (t1) to [bend right=20]node[above]{$1'$} (m1);
-    \draw [<->] (t2) to [bend right=20]node[above left]{$2'$} (m2);
-\end{tikzpicture}
-\pagebreak
-\\This optimal can be achieved by noticing that the swap operations are composible.
-Notice that the composition of swap 1, swap 3, and swap 4 is equivalent to swap $1'$, since `A' starts and ends up at $TAMUK[2]$, `M' starts at $TAMUK[0]$ and ends up at $TAMUK[4]$, and `T' starts at $TAMUK[4]$ and ends up at $TAMUK[0]$.
-Similarly swap $2'$ is equivalent to the composition of swap 2, 5, and 6. Finding the minimal swap then becomes finding cycles in a graph. Unfortunately, we would then need to store the swaps as edges between vertices (which will be on the same order of magnitude as the array itself), violating constraint 3.
+\\Since $first\_m=4$, we don't need to evaluate $TAMUK[4]$ and can stop, so this is the final sorted array.\\\\
+This algorithm is correct since it is insertion sort with an improvement. 
+Rather than doing a maximum of $O(n)$ swaps in order to place the current element in the intermediate sorted list, 
+it is able to place it in a maximum of 2 swaps. Thus, the worst case run time is $O(n)$ rather than $O(n^2)$ for standard insertion sort.
+The reason only 2 swaps maximum is needed is that we keep track of the position of the last known letter $T$ and the position of the first known letter $M$, 
+and only need to swap to these two locations (with their respective offsets) for the current element.
 
 \chapter{Code}
+\begin{lstlisting}[language=Python, caption=sort\_tam.py]
+"""
+class for sorting an array of T's, A's, and M's
+"""
+
+class SortTAM:
+    def __init__(self, tam):
+        self.tamuk = [c for c in tam]
+        # if the last character in the string is '#', remove from array
+        if self.tamuk[-1] == '#':
+            self.tamuk = self.tamuk[:-1]
+    
+    # sorts the tamuk array
+    def sort_tam(self):
+        last_t = -1
+        first_m = len(self.tamuk)
+        i = 0
+        while(i < first_m):
+            if self.tamuk[i] == 'M':
+                while(self.tamuk[first_m - 1] == 'M'):
+                    first_m -= 1
+                if i < first_m - 1:
+                    self.swap(i, first_m - 1)
+                    first_m -= 1
+            if self.tamuk[i] == 'T':
+                if i > last_t + 1:
+                    self.swap(i, last_t + 1)
+                last_t += 1
+            i += 1
+    # swaps elements in the i-th and j-th position of the array tamuk
+    def swap(self, i, j):
+        self.tamuk[i], self.tamuk[j] = self.tamuk[j], self.tamuk[i]
+
+
+def main():
+    raw_input = input("Please enter a string of T's, A's, and M's in any order (i.e. MMAATT):")
+    st = SortTAM(raw_input)
+    st.sort_tam()
+    print(f'The sorted string is {"".join(st.tamuk)}')
+
+if __name__ == '__main__':
+    main()
+\end{lstlisting}
 
 \chapter{Tests}
+\begin{lstlisting}[language=Python, caption=sort\_tam\_tests.py]
+import unittest
+from sort_tam import SortTAM
+
+class TestSortTAM(unittest.TestCase):
+    # test already sorted
+    def test_already_sorted(self):
+        tam = 'TTAAAMMMM'
+        st = SortTAM(tam)
+        st.sort_tam()
+        self.assertEqual(''.join(st.tamuk), tam)
+    
+    #test a string with all 3 types of letters
+    def test_normal(self):
+        tam = 'ATMTTAMMAM'
+        st = SortTAM(tam)
+        st.sort_tam()
+        self.assertEqual(''.join(st.tamuk), 'TTTAAAMMMM')
+    
+    #test a string with only Ts and Ms
+    def test_tm(self):
+        tam = 'MTMMMTTTMTM'
+        st = SortTAM(tam)
+        st.sort_tam()
+        self.assertEqual(''.join(st.tamuk), 'TTTTTMMMMMM')
+    
+    #test a string with only As and Ms
+    def test_am(self):
+        tam = 'AMMMAAMAMAM'
+        st = SortTAM(tam)
+        st.sort_tam()
+        self.assertEqual(''.join(st.tamuk), 'AAAAAMMMMMM')
+    
+    #test a string with only As and Ts
+    def test_at(self):
+        tam = 'ATAATATTATA'
+        st = SortTAM(tam)
+        st.sort_tam()
+        self.assertEqual(''.join(st.tamuk), 'TTTTTAAAAAA')
+
+if __name__ == '__main__':
+    unittest.main()
+\end{lstlisting}
 
 \chapter{Lessons Learned}
-
+I initially had an algorithm that swapped the letter $A$ around, but the resulting number of swaps was much more than the minimum needed. 
+I learned some graph theory in order to merge the swaps in order to get to the minimum, 
+but the solution would have used extra space to store the swaps, which meant it violated constraint 3 and therefore was not good enough.
+I then went to Professor Ammari's office hours and showed him the algorithm and asked for any suggestions and improvements.
+With his help, I got to the algorithm currently used. So the big lesson I learned was to not be afraid to ask for help when you are stuck.
 \bibliographystyle{plain}
 \bibliography{refs}
 
