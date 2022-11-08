@@ -1,0 +1,116 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Welcome to writeLaTeX --- just edit your LaTeX on the left,
+% and we'll compile it for you on the right. If you give
+% someone the link to this page, they can edit at the same
+% time. See the help menu above for more info. Enjoy!
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+ 
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\usepackage{tikz}
+\usetikzlibrary{shapes,positioning}
+
+\tikzset{ell/.style={circle,draw,minimum height=0.5cm,minimum width=0.5cm,inner sep=0.2cm}}
+
+%New colors defined below
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+%Code listing style named "mystyle"
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{backcolour}, commentstyle=\color{codegreen},
+  keywordstyle=\color{magenta},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\footnotesize,
+  breakatwhitespace=false,         
+  breaklines=true,                 
+  captionpos=b,                    
+  keepspaces=true,                 
+  numbers=left,                    
+  numbersep=5pt,                  
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=2
+}
+
+%"mystyle" code listing set
+\lstset{style=mystyle}
+
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{question}[2][Question]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+ 
+\begin{document}
+ 
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+ 
+\title{Discussion 12}%replace X with the appropriate number
+\author{Mengxiang Jiang\\ %replace with your name
+CSEN 5303 Foundations of Computer Science} %if necessary, replace with your course title
+ 
+\maketitle
+
+\begin{problem}{statement}
+    Feel free to answer one of the following questions:
+\begin{quote}
+1. Discuss the direct proof method. Give an illustrative example.\\
+2. Discuss the indirect proof (or proof by contraposition) method. Give an illustrative
+example.
+\end{quote}
+\end{problem}
+
+\begin{problem}{2}
+An indirect proof can take two forms, a proof by contraposition or a proof by contradiction.
+A proof by contraposition rearranges the original implication into its contrapositive form.
+Namely $P \rightarrow Q$ becomes $\neg Q \rightarrow \neg P$. 
+Since the contrapositive is logically equivalent to the original, one can then proceed with a direct proof of the contrapositive and thereby prove the original.\\
+\\Example: For any integer $n$, if $n^2$ is odd, then $n$ is odd\\
+Contrapositive: For any integer $n$, if $n$ is even, then $n^2$ is even\\
+Since $n$ is even, let $n = 2k$ for some integer $k$, then $n^2 = (2k)^2 = 4k^2 = 2(2k^2)$, so $n^2$ must be even. $\qed$
+\\\\A proof by contradiction starts assuming the original premise implies the negation of the original conclusion. 
+Then from the negated conclusion, derive an inconsistency with the original premise, thereby arriving at a contradiction and proving the original.
+Namely if the original was $P \rightarrow Q$, then assume $P \rightarrow \neg Q$, and from $\neg Q$ derive $\neg P$.\\
+\\Example: For any integer $n$, if $n^2$ is odd, then $n$ is odd\\
+Assume for contradiction: For any integer $n$, if $n^2$ is odd, then $n$ is even.\\
+Since $n$ is even, let $n = 2k$ for some integer $k$, then $n^2 = (2k)^2 = 4k^2 = 2(2k^2)$, so $n^2$ must be even.
+But we assumed $n^2$ is odd, and $n^2$ cannot be both odd and even, therefore contradiction. $\qed$\\\\
+\end{problem}
+% --------------------------------------------------------------
+%     You don't have to mess with anything below this line.
+% --------------------------------------------------------------
+ 
+\end{document}
