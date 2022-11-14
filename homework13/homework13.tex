@@ -1,0 +1,169 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Welcome to writeLaTeX --- just edit your LaTeX on the left,
+% and we'll compile it for you on the right. If you give
+% someone the link to this page, they can edit at the same
+% time. See the help menu above for more info. Enjoy!
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+ 
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\usepackage{tikz}
+\usetikzlibrary{shapes,positioning}
+
+\tikzset{ell/.style={circle,draw,minimum height=0.5cm,minimum width=0.5cm,inner sep=0.2cm}}
+\tikzset{rec/.style={rectangle,draw,minimum height=0.5cm,minimum width=0.5cm,inner sep=0.2cm}}
+
+%New colors defined below
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+%Code listing style named "mystyle"
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{backcolour}, commentstyle=\color{codegreen},
+  keywordstyle=\color{magenta},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\footnotesize,
+  breakatwhitespace=false,         
+  breaklines=true,                 
+  captionpos=b,                    
+  keepspaces=true,                 
+  numbers=left,                    
+  numbersep=5pt,                  
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=2
+}
+
+%"mystyle" code listing set
+\lstset{style=mystyle}
+
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{question}[2][Question]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+ 
+\begin{document}
+ 
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+ 
+\title{Homework 13}%replace X with the appropriate number
+\author{Mengxiang Jiang\\ %replace with your name
+CSEN 5303 Foundations of Computer Science} %if necessary, replace with your course title
+ 
+\maketitle
+
+\begin{problem}{1}
+    Determine which rule of inference is used in each of the following arguments.
+    \begin{quote}
+        1. Kangaroos live in Australia and are marsupials. Therefore, kangaroos are marsupials.\\
+        Simplification: $(p \land q) \rightarrow p$\\\\
+        2. It is hotter than 100 degrees today or the pollution is dangerous. It is less than 100 degrees
+        outside today. Therefore, the pollution is dangerous.\\
+        Disjunctive syllogism: $[(p \lor q) \land \neg p] \rightarrow q$\\\\
+        3. Linda is an excellent swimmer. If Linda is an excellent swimmer, then she can work as a
+        lifeguard. Therefore, Linda can work as a lifeguard.\\
+        Modus ponens: $[p \land (p \rightarrow q)] \rightarrow q$\\\\
+        4. Steve will work at a computer company this summer. Therefore, this summer Steve will
+        work at a computer company or he will be in beach bun.\\
+        Addition: $p \rightarrow (p \lor q)$\\\\
+        5. If I work all night on this homework, then I can answer all the exercises. If I answer all the
+        exercises, I will understand the material. Therefore, if I work all night on this homework,
+        then I will understand the material.\\
+        Hypothetical syllogism: $[(p \rightarrow q) \land (q \rightarrow r)] \rightarrow (p \rightarrow r)$\\\\
+        6. If George does not have eight legs, then he is not an insect. George is an insect. Therefore,
+        George has eight legs.\\
+        Modus tollens: $[\neg q \land (p \rightarrow q)] \rightarrow \neg p$
+    \end{quote}
+\end{problem}
+\pagebreak
+\begin{problem}{2}
+    Let P($n$) be the statement that $1^2 + 2^2 + \ldots + n^2 = n(n + 1)(2n + 1)/6$ for the positive integer $n$.
+    \begin{quote}
+        1. What is the statement P(1)?\\
+        $1^2 = 1(1+1)(2+1)/6$\\\\
+        2. Show that P(1) is ture, completing the basis step of the proof.\\
+        $1^2 = 1(1) = 1$\\ 
+        $1(1+1)(2+1)/6 = 1(2)(3)/6 = 6/6 = 1$\\
+        $\therefore$ P(1) is true.\\\\
+        3. What is the inductive hypothesis?\\
+        Assume P($k$) is true for some integer $k \geq 1$.\\\\
+        4. What do you need to prove in the inductive step?\\
+        Prove P($k+1$) is true using P($k$).\\\\
+        5. Complete the inductive step.\\
+        P($k+1$): $1^2 + 2^2 + \ldots + k^2 + (k+1)^2 = (1^2 + 2^2 + \ldots + k^2) + (k+1)^2$\\
+        $$=\frac{k(k+1)(2k+1)}{6}+(k+1)^2 = (k+1)\left(\frac{2k^2+k}{6}+k+1\right)$$
+        $$=(k+1)\left(\frac{2k^2+7k+6}{6}\right) = (k+1)\left(\frac{(k+2)(2k+3)}{6}\right)$$
+        $$=\frac{\Bigl(k+1\Bigr)\Bigl((k+1)+1\Bigr)\Bigl(2(k+1)+1\Bigr)}{6}$$
+        6. Explain why these steps show that this formula is true whenever n is a positive integer.\\
+        Since we have shown P(1) is true in step 2, we can let $k=1$ in step 3 and show P(2) is true in step 5.
+        We can then set $k=2$ in step 3 and show P(3) is true in step 5, and so on for all the integers. 
+    \end{quote}
+\end{problem}
+\pagebreak
+\begin{problem}{6}
+    Prove each of the following statements. 
+    \begin{quote}
+        1. 2 divides $n^2 + n$ whenever $n$ is a positive integer.\\
+        Two cases for $n$:\\
+        Case 1: $ n \equiv 0 \pmod{2} \rightarrow n^2 + n \equiv 0^2 + 0 \equiv 0 \pmod{2} \rightarrow 2|(n^2 + n)$\\
+        Case 2: $ n \equiv 1\pmod{2} \rightarrow n^2 +n \equiv 1^2 + 1 \equiv 2 \equiv 0 \pmod{2} \rightarrow  2|(n^2 + n)$\\\\
+        2. 3 divides $n^3+2n$ whenever $n$ is a positive integer.\\
+        Three cases for $n$:\\
+        Case 1: $n \equiv 0 \pmod{3} \rightarrow n^3 + 2n \equiv 0^3 + 2(0) \equiv 0 \pmod{3} \rightarrow 3|(n^3+2n)$\\ 
+        Case 2: $n \equiv 1 \pmod{3} \rightarrow n^3 + 2n \equiv 1^3 + 2(1) \equiv 3 \equiv 0 \pmod{3} \rightarrow 3|(n^3+2n)$\\
+        Case 3: $n \equiv 2 \pmod{3} \rightarrow n^3 + 2n \equiv 2^3 + 2(2) \equiv 12 \equiv 0 \pmod{3} \rightarrow 3|(n^3+2n)$\\\\
+        3. 5 divides $n^5 - n$ whenever n is a nonnegative integer.\\
+        Five cases for $n$:\\
+        Case 1: $n \equiv 0 \pmod{5} \rightarrow n^5 - n \equiv 0^5 - 0 \equiv 0 \pmod{5} \rightarrow 5|(n^5-n)$\\
+        Case 2: $n \equiv 1 \pmod{5} \rightarrow n^5 - n \equiv 1^5 - 1 \equiv 0 \pmod{5} \rightarrow 5|(n^5-n)$\\
+        Case 3: $n \equiv 2 \pmod{5} \rightarrow n^5 - n \equiv 2^5 - 2 \equiv 30 \equiv 0 \pmod{5} \rightarrow 5|(n^5-n)$\\
+        Case 4: $n \equiv 3 \pmod{5} \rightarrow n^5 - n \equiv n(n^4 - 1) \equiv n(n^2-1)(n^2+1)$\\
+        $\equiv 3(3^2-1)(3^2+1) \equiv 3(8)(10) \equiv 3(8)(0) \equiv 0 \pmod{5} \rightarrow 5|(n^5-n)$\\
+        Case 5: $n \equiv 4 \pmod{5} \rightarrow n^5 - n \equiv n(n^4 - 1) \equiv n(n^2-1)(n^2+1)$\\
+        $\equiv n(n+1)(n-1)(n^2+1) \equiv 4(0)(3)(4^2+1) \equiv 0 \pmod{5} \rightarrow 5|(n^5-n)$\\\\
+        4. 6 divides $n^3 - n$ whenever $n$ is a nonnegative integer.\\
+        $n^3 - n = n(n^2-1) = n(n+1)(n-1) = (n-1)(n)(n+1)$\\
+        $ \therefore n^3 - n$ is the product of 3 consecutive integers.\\
+        Given 3 consecutive integers, at least one must be a multiple of 3, and one (could be the same one) a multiple of 2 (pigeonhole principle).
+        The product of the 3 integers therefore contains both 2 and 3 as factors, therefore the product must be divisible by 6.\\
+
+    \end{quote}
+\end{problem}
+% --------------------------------------------------------------
+%     You don't have to mess with anything below this line.
+% --------------------------------------------------------------
+ 
+\end{document}
