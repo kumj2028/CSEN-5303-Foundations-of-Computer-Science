@@ -1,0 +1,125 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Welcome to writeLaTeX --- just edit your LaTeX on the left,
+% and we'll compile it for you on the right. If you give
+% someone the link to this page, they can edit at the same
+% time. See the help menu above for more info. Enjoy!
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+ 
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\usepackage{tikz}
+\usetikzlibrary{shapes,positioning}
+
+\tikzset{ell/.style={circle,draw,minimum height=0.5cm,minimum width=0.5cm,inner sep=0.2cm}}
+
+%New colors defined below
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+%Code listing style named "mystyle"
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{backcolour}, commentstyle=\color{codegreen},
+  keywordstyle=\color{magenta},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\footnotesize,
+  breakatwhitespace=false,         
+  breaklines=true,                 
+  captionpos=b,                    
+  keepspaces=true,                 
+  numbers=left,                    
+  numbersep=5pt,                  
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=2
+}
+
+%"mystyle" code listing set
+\lstset{style=mystyle}
+
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{question}[2][Question]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+ 
+\begin{document}
+ 
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+ 
+\title{Discussion 14}%replace X with the appropriate number
+\author{Mengxiang Jiang\\ %replace with your name
+CSEN 5303 Foundations of Computer Science} %if necessary, replace with your course title
+ 
+\maketitle
+
+\begin{problem}{statement}
+    Discuss the mathematical induction proof method. Provide an illustrative example.
+    \begin{quote}
+        Mathematical induction is a proof technique that applies to statements about integers. 
+        Suppose $P(n)$ is a statement about the integer $n$, 
+        and we want to prove it is true for all $n$ in a certain iteratable domain 
+        (usually this is the positive integers or can be converted to such).
+        The following are the steps of the proof:\\\\
+        1. Basis step: prove $P(1)$ is true.\\
+        2. Inductive hypothesis: assume $P(k)$ is true for any $k \geq 1$\\
+        3. Inductive step: Use $P(k)$ to prove $P(k+1)$. Once this is shown, the proof is complete.\\\\
+        The proof takes advantage of the fact that any positive integer is by definition either 1 
+        or a successor of another positive integer, thereby covering all possible cases.\\\\
+        An illustrative example of proof by induction is the Fibonacci inequality:
+        Let the \emph{Fibonacci sequence} be defined as $F_0 = 0$, $F_1 = 1$ and all subsequent terms be $F_{n+2} = F_n + F_{n+1}$.\\
+        Let $\phi$ be $\frac{1+\sqrt{5}}{2}$.\\
+        Then $F_n \leq \phi^{n-1}$ for all positive integers $n$.\\\\
+        1. Basis step: $P(1)$ is the claim $F_1 = 1 \leq \phi^{1-1} = \phi^0 = 1$, so $P(1)$ is true.\\
+        However there is a second basis step required, namely $P(2)$:\\
+        $F_2 = F_0 + F_1 = 0 + 1 = 1 \leq \phi^{2-1} = \phi^1 = \frac{1+\sqrt{5}}{2}$.\\
+        This is true since $\sqrt{5} > \sqrt{4} = 2 \rightarrow \frac{1+\sqrt{5}}{2} > \frac{1+2}{2} > \frac{2}{2} = 1$.\\\\
+        2. Inductive hypothesis: we'll need to assume two inductive hypotheses, 
+        namely $P(k)$ and $P(k+1)$ is true, which is why we needed two base cases for $k \geq 1$ and $(k+1) \geq 2$.\\
+        \pagebreak
+        \\3. Inductive step: $P(k+2)$: $F_{k+2} \leq \phi^{k+2-1}$. To show this we have:\\
+        $F_{k+2} = F_k + F_{k+1} \leq \phi^{k-1} + \phi^k$ from the inductive hypotheses.\\
+        One additional fact we have to make use of is the fact that $\phi$ is known as the golden ratio with the following property:\\
+        $1 + \phi = \phi^2$\\
+        We see that we can factor $\phi^{k-1} + \phi^k = \phi^{k-1}(1+\phi)$\\
+        Substituting $1 + \phi = \phi^2$ in, we have $\phi^{k-1}(\phi^2) = \phi^{k-1+2} = \phi^{k+2-1}$ as desired.\\
+        $\therefore P(k+2) \equiv F_{k+2} \leq \phi^{k+2-1}$ is true $\qed$
+
+    \end{quote}
+\end{problem}
+% --------------------------------------------------------------
+%     You don't have to mess with anything below this line.
+% --------------------------------------------------------------
+ 
+\end{document}
