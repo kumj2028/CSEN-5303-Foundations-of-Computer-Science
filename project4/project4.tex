@@ -99,7 +99,7 @@ Professor Habib Ammari} %if necessary, replace with your course title
 \chapter{Introduction}
 The problem given is to store $k$ stacks in a single array such that when one stack grows
 to the boundary of another stack, we will need to reorganize the stacks so all the stack have size proportional gaps between them.
-The problem is split into 5 questions which are listed below and answered in the Design chapter:
+The problem is split into 4 questions which are listed below and answered in the Design chapter:
 
 \begin{enumerate}
     \item On the assumption that there is a procedure $reorganize$ to call when stacks collide, write
@@ -131,8 +131,10 @@ procedure Push(snum: integer, elem: elementtype; var MS: MultiStack);
         if IsFull(MS) then
             error('stack is full');
         else if (snum < MS.stk_size - 1) and 
-        (MS.tops[snum]+1 = MS.bots[snum+1]) then
+        (MS.tops[snum]+1 = MS.bots[snum+1]) then begin
             reorganize(MS);
+            Push(snum, elem, MS);
+        end;
         else begin
             MS.tops[snum] := MS.tops[snum] + 1;
             MS.arr[MS.tops[snum]] := elem;
@@ -162,13 +164,9 @@ function IsEmpty(snum: integer; var MS: MultiStack):boolean;
         return MS.tops[snum] < MS.bots[snum]
     end;
 
-function IsFull(snum: integer; var MS: MultiStack):boolean;
+function IsFull(var MS: MultiStack):boolean;
     begin
-        if snum = MS.stk_size - 1 then
-            return MS.tops[stk_size - 1] = MS.arr_size - 1;
-        else
-            return false;
-        end;
+        return (Sum(MS.tops) - Sum(MS.bots) + MS.stk_size = MS.arr_size)
     end;
 \end{verbatim}
 The only time the $reorganize$ procedure is called is during the $Push$ operation,
@@ -180,31 +178,39 @@ under the assumption there is a $MakeNewTops$ procedure:
 procedure reorganize(var MS: MultiStack);
     var 
         newtops: array[0..MS.stksize] of integer;
-        goal, i, j, k: integer;
+        goal, top_dif, i, j, k: integer;
     begin
         newtops := MakeNewTops(MS);
         goal := -1;
         for i := 1 to MS.stk_size - 1 do begin
-            if i = MS.stk_size - 1 or newtops[i] < MS.bots[i+1] then begin
-                if goal > -1 then begin
-                    for j:=i to goal do begin
-                        top_dif := newtops[j] - MS.tops[j];
-                        for k:=newtops[j] to MS.bots[j] + top_dif do
+            if newtops[i] < MS.tops[i] then begin
+                top_dif := MS.tops[i] - newtops[i];
+                for k:=(MS.bots[i] - top_dif) to newtops[i] do
+                    MS.arr[k] := MS.arr[k + top_dif];
+                MS.tops[i] := newtops[i];
+                MS.bots[i] := MS.bots[i] - topdif;
+            else begin
+                if i = MS.stk_size - 1 or newtops[i] < MS.bots[i+1] then begin
+                    if goal > -1 then begin
+                        for j:=i downto goal do begin
+                            top_dif := newtops[j] - MS.tops[j];
+                            for k:=newtops[j] to MS.bots[j] + top_dif do
+                                MS.arr[k] := MS.arr[k-top_dif];
+                            MS.tops[j] := newtops[j];
+                            MS.bots[j] := MS.bots[j] + top_dif;
+                        end;
+                        goal := -1
+                    else begin
+                        top_dif := newtops[i] - MS.tops[i];
+                        for k:=newtops[i] downto MS.bots[i] + top_dif do
                             MS.arr[k] := MS.arr[k-top_dif];
-                        MS.tops[j] := newtops[j];
-                        MS.bots[j] := MS.bots[j] + top_dif;
+                        MS.tops[i] := newtops[i];
+                        MS.bots[i] := MS.bots[i] + top_dif;
                     end;
-                    goal := -1
-                else begin
-                    top_dif := newtops[i] - MS.tops[i]
-                    for k:=newtops[i] to MS.bots[i] + top_dif do
-                        MS.arr[k] := MS.arr[k-top_dif]
-                    MS.tops[i] := newtops[i];
-                    MS.bots[i] := MS.bots[i] + top_dif;
+                else
+                    if goal = -1 then
+                        goal := i;
                 end;
-            else
-                if goal = -1 then
-                    goal := i
             end;
         end;
 \end{verbatim}
@@ -226,11 +232,11 @@ function MakeNewTops(var MS: MultiStack):array of integer;
     begin
         for i:=0 to MS.stk_size - 1 do begin
             cur_size := MS.tops[i] - MS.bots[i] + 1;
-            stk_sizes[i] := cur_size;
-            gaps[i] := Max(cur_size, 1);
+            stk_sizes[i] := Max(cur_size, 1);
+            gaps[i] := cur_size;
         end;
-        min_gaps := 0
         while Sum(stk_sizes) + Sum(gaps) > MS.arr_size do begin
+            min_gaps := 0;
             for i:=0 to MS.stk_size - 1 do begin
                 gaps[i] := gaps[i] - 1;
                 if gaps[i] < 1 then begin
@@ -272,8 +278,8 @@ class MultiStack:
         if self.is_full(snum):
             raise StackFull
         # top of the current stack will overlap with bot of next
-        if snum < self.stk_size - 1 and\
-        self.tops[snum] + 1 == self.bots[snum + 1]:
+        if (snum < self.stk_size - 1 and self.tops[snum] + 1 == self.bots[snum + 1])\
+            or (self.tops[snum] + 1 == self.arr_size):
             self.reorganize()
             self.push(snum, elem)
         else:
@@ -296,37 +302,43 @@ class MultiStack:
         return self.tops[snum] < self.bots[snum]
     
     def is_full(self, snum):
-        if snum == self.stk_size - 1:
-            return self.tops[self.stk_size-1] == self.arr_size - 1
-        else:
-            return False
+        return sum(self.tops) - sum(self.bots) + self.stk_size == self.arr_size
 
     def reorganize(self):
         newtops = self.make_new_tops()
         goal = -1
         for i in range(1, self.stk_size):
-            # the new top does not collide
-            if i == self.stk_size - 1 or newtops[i] < self.bots[i + 1]:
-                # there are earlier stacks waiting for this stack to resolve first
-                if goal > -1:
-                    for j in range(i, goal - 1, -1):
-                        top_dif = newtops[j] - self.tops[j]
-                        for k in range(newtops[j], self.bots[j] + top_dif - 1, -1):
-                            self.arr[k] = self.arr[k - top_dif]
-                        self.tops[j] = newtops[j]
-                        self.bots[j] = self.bots[j] + top_dif
-                    goal = -1
-                else:
-                    top_dif = newtops[i] - self.tops[i]
-                    for k in range(newtops[i], self.bots[i] + top_dif - 1, -1):
-                        self.arr[k] = self.arr[k - top_dif]
-                    self.tops[i] = newtops[i]
-                    self.bots[i] = self.bots[i] + top_dif
-            # the new top collides with an old bot
+            # we're shifting the stack backwards (no chance of collision)
+            if newtops[i] < self.tops[i]:
+                top_dif = self.tops[i] - newtops[i]
+                for k in range(self.bots[i] - top_dif, newtops[i] + 1):
+                    self.arr[k] = self.arr[k + top_dif]
+                self.tops[i] = newtops[i]
+                self.bots[i] = self.bots[i] - top_dif
+            # we're shifting the stack forwards (need to handle collisions)
             else:
-                # set the goal if it's not set
-                if goal == -1:
-                    goal = i
+                # if the new top does not collide
+                if i == self.stk_size - 1 or newtops[i] < self.bots[i + 1]:
+                    # there are earlier stacks waiting for this stack to resolve first
+                    if goal > -1:
+                        for j in range(i, goal - 1, -1):
+                            top_dif = newtops[j] - self.tops[j]
+                            for k in range(newtops[j], self.bots[j] + top_dif - 1, -1):
+                                self.arr[k] = self.arr[k - top_dif]
+                            self.tops[j] = newtops[j]
+                            self.bots[j] = self.bots[j] + top_dif
+                        goal = -1
+                    else:
+                        top_dif = newtops[i] - self.tops[i]
+                        for k in range(newtops[i], self.bots[i] + top_dif - 1, -1):
+                            self.arr[k] = self.arr[k - top_dif]
+                        self.tops[i] = newtops[i]
+                        self.bots[i] = self.bots[i] + top_dif
+                # the new top collides with an old bot
+                else:
+                    # set the goal if it's not set
+                    if goal == -1:
+                        goal = i
     
     def make_new_tops(self):
         newtops = [0] * self.stk_size
@@ -335,11 +347,11 @@ class MultiStack:
         # initialize gaps to be the same as size of each stack
         for i in range(self.stk_size):
             cur_size = self.tops[i] - self.bots[i] + 1
-            stk_sizes[i] = cur_size
-            gaps[i] = max(cur_size, 1)
+            stk_sizes[i] = max(cur_size, 1)
+            gaps[i] = cur_size
         # reduce gaps until the stacks and gaps all fit
-        min_gaps = 0
         while(sum(stk_sizes) + sum(gaps) > self.arr_size):
+            min_gaps = 0
             for i in range(self.stk_size):
                 gaps[i] -= 1
                 if gaps[i] < 1:
@@ -427,18 +439,92 @@ window.mainloop()
 
 
 \chapter{Tests}
-TODO
+\begin{lstlisting}[language=Python, caption=multistack\_tests.py]
+import unittest
+from multistack import MultiStack, StackFull, StackEmpty
+
+class TestMultiStack(unittest.TestCase):
+    # test creating a small multistack with one stack and array size of 5
+    def test_small_single(self):
+        ms = MultiStack(1, 5)
+        self.assertEqual(ms.is_empty(0), True)
+        with self.assertRaises(StackEmpty):
+            ms.pop(0)
+        ms.push(0, 3)
+        self.assertEqual(ms.is_empty(0), False)
+        self.assertEqual(ms.top(0), 3)
+        ms.pop(0)
+        self.assertEqual(ms.is_empty(0), True)
+        ms.push(0, 3)
+        ms.push(0, 1)
+        ms.push(0, 4)
+        ms.push(0, 1)
+        ms.push(0, 5)
+        with self.assertRaises(StackFull):
+            ms.push(0, 9)
+        self.assertEqual(ms.top(0), 5)
+    
+    #test creating default multistack with 3 stacks and array size of 20
+    def test_default(self):
+        ms = MultiStack()
+        self.assertEqual(ms.is_empty(0), True)
+        with self.assertRaises(StackEmpty):
+            ms.pop(0)
+        self.assertEqual(ms.is_empty(1), True)
+        with self.assertRaises(StackEmpty):
+            ms.pop(1)
+        self.assertEqual(ms.is_empty(2), True)
+        with self.assertRaises(StackEmpty):
+            ms.pop(2)
+        ms.push(0, 3)
+        ms.push(0, 1)
+        ms.push(0, 4)
+        ms.push(0, 1)
+        ms.push(0, 5)
+        ms.push(1, 2)
+        ms.push(1, 7)
+        ms.push(1, 1)
+        ms.push(1, 8)
+        ms.push(2, 1)
+        ms.push(2, 4)
+        ms.push(2, 1)
+        ms.push(2, 4)
+        ms.push(2, 2)
+        ms.push(2, 1)
+        ms.push(2, 3)
+        ms.push(2, 5)
+        ms.push(2, 6)
+        with self.assertRaises(StackFull):
+            ms.push(2, 2)
+        self.assertEqual(ms.top(0), 5)
+        self.assertEqual(ms.top(1), 8)
+        self.assertEqual(ms.top(2), 6)
+        ms.pop(2)
+        ms.pop(2)
+        self.assertEqual(ms.top(2), 3)
+        ms.push(0, 9)
+        self.assertEqual(ms.top(0), 9)
+
+
+if __name__ == '__main__':
+    unittest.main()
+\end{lstlisting}
 
 \chapter{Lessons Learned}
 This project seemed simple at first, but once I tried to implement it,
 it was much harder than I initially thought. Using an array to store multiple
 stacks while dynamically adjusting the gaps between the stacks is very error-prone 
-with a lot of very subtle hard to fix bugs (some of which I haven't even fixed as of yet).
+with a lot of very subtle hard to fix bugs.
 In class Professor Ammari suggested we use a pointer/linked-list approach to handle
 multiple stacks in an array, but that solution would be in conflict with the requirements 
 listed in the project through the questions. Although that solution would most likely be much
 easier and less error-prone, I decided to follow the project requirements and stick with
-a purely array based implementation.
+a purely array based implementation. I spent a huge amount of time including thinking about 
+fixing bugs while eating, showering, and even in my dreams, but when I finally fixed all the bugs 
+and got it working, it was extremely satisfying.
+The lesson I learned is that sometimes doing things the hard way 
+could end up being better than the easy way.
+
 \bibliographystyle{plain}
 \bibliography{refs}
 
