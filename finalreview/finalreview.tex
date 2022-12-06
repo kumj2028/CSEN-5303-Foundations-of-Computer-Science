@@ -1,0 +1,124 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Welcome to writeLaTeX --- just edit your LaTeX on the left,
+% and we'll compile it for you on the right. If you give
+% someone the link to this page, they can edit at the same
+% time. See the help menu above for more info. Enjoy!
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+ 
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\usepackage{tikz}
+\usetikzlibrary{shapes,positioning}
+
+\tikzset{ell/.style={circle,draw,minimum height=0.5cm,minimum width=0.5cm,inner sep=0.2cm}}
+
+%New colors defined below
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+%Code listing style named "mystyle"
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{backcolour}, commentstyle=\color{codegreen},
+  keywordstyle=\color{magenta},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\footnotesize,
+  breakatwhitespace=false,         
+  breaklines=true,                 
+  captionpos=b,                    
+  keepspaces=true,                 
+  numbers=left,                    
+  numbersep=5pt,                  
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=2
+}
+
+%"mystyle" code listing set
+\lstset{style=mystyle}
+
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{question}[2][Question]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+ 
+\begin{document}
+ 
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+ 
+\title{Final Review}%replace X with the appropriate number
+\author{Mengxiang Jiang\\ %replace with your name
+CSEN 5303 Foundations of Computer Science} %if necessary, replace with your course title
+ 
+\maketitle
+
+\begin{problem}{6}
+    Let $P(n)$ be the statement:
+    $$\log{n!} > \frac{n\log{n}}{4},\text{ for $n > 4$}$$
+    \begin{enumerate}
+        \item What is the statement $P(5)$?\\
+        $$P(5):\; \log{5!} > \frac{5\log{5}}{4}$$
+        \item Show that $P(5)$ is true, completing the basis step of the proof.\\
+        $$\log{5!} = \log(5\times4\times3\times2\times1) = \log(5\times24) > \log(5\times5) = \log5^2 = 2\log5 > \frac{5\log5}{4}$$
+        \item What is the inductive hypothesis?\\
+        $$\text{Assume $P(k)$ is true: }\log k! > \frac{k\log k}{4}$$
+        \item What do you need to prove in the inductive step?\\
+        $$\text{Need to prove $P(k+1)$ is true: }\log(k+1)! > \frac{(k+1)\log(k+1)}{4}$$
+        \item Complete the inductive step. You must justify any single step in your proof. Otherwise,
+        your answer is wrong. Show your work step by step.\\
+        $$\log(k+1)! = \log((k+1)k!) = \log(k+1) + \log k! > \log(k+1) + \frac{k\log k}{4}$$
+        $$\log(k+1) + \frac{k\log k}{4} = \frac{4\log(k+1) + k\log k}{4} = \frac{\log((k+1)^4k^k)}{4}$$
+        \begin{lemma}{Q}
+            Let $Q(n)$ be the statement:\\
+            $$n^n > (n+1)^{n-1},\text{ for $n > 2$}$$
+            Basis: $Q(3):\; 3^3 = 27 > (3+1)^{3-1} = 4^2 = 16$, so $Q(3)$ is true.\\
+            Inductive: Assume $Q(k)$ is true: $k^k > (k+1)^{k-1}$\\
+            Need to prove $Q(k+1)$: $(k+1)^{k+1} > (k+2)^k$
+            $$(k+1)^{k+1} = k^k\left(1+\frac{1}{k}\right)^k(k+1) > (k+1)^{k-1}(k+1)\left(1+\frac{1}{k}\right)^k$$
+            $$ = (k+1)^{k}\left(1+\frac{1}{k}\right)^k = \left(k+\frac{1}{k} + 2\right)^k > (k+2)^k \rightarrow \text{Q(k+1) is true.}$$
+            $$[Q(3) \land (Q(k) \rightarrow Q(k+1))] \rightarrow \forall n Q(n)$$ 
+        \end{lemma}
+        Using \textbf{Lemma Q}, we can proceed as follows:\\
+        $$\frac{\log((k+1)^4k^k)}{4} > \frac{\log((k+1)^4(k+1)^{k-1})}{4} = \frac{(k+3)\log(k+1)}{4} > \frac{(k+1)\log(k+1)}{4}$$
+        Therefore $P(k+1)$ is true.\\
+        $$[P(5) \land (P(k) \rightarrow P(k+1))] \rightarrow \forall n P(n)$$
+    \end{enumerate}
+\end{problem}
+
+% --------------------------------------------------------------
+%     You don't have to mess with anything below this line.
+% --------------------------------------------------------------
+ 
+\end{document}
